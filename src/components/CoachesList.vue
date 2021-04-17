@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="content-center">
     <h1>NOW YOU WILL SEE</h1>
-    <ul class="w-max grid-cols-2">
+    <ul class="w-full text-center">
       <coach-card
         v-for="coach in this.$store.state.coaches"
         :key="coach.id"

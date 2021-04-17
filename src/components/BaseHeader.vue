@@ -1,22 +1,19 @@
 <template>
   <div class="p-6 text-white font-serif w-full h-28 bg-green-600">
     <div>
-      <div v-if="!this.$store.state.loggedIn">
-        <base-button class="float-right pl-4 pr-4 py-2">
-          Sign Up
-        </base-button>
-        <base-button
-          class="float-right pl-4 pr-4 py-2"
-          @click="this.$store.commit('logIn')"
-        >
+      <div v-if="!this.$store.state.loggedIn" class="float-right">
+        <base-button @click="this.$store.commit('logIn')">
           Log In
         </base-button>
+        <base-button>
+          Sign Up
+        </base-button>
       </div>
-      <div v-else>
-        <base-button
-          class="float-right pl-4 pr-4 py-2"
-          @click="this.$store.commit('logOut')"
-        >
+      <div v-else class="float-right">
+        <base-button>
+          Register a new coach!
+        </base-button>
+        <base-button @click="this.$store.commit('logOut')">
           Log Out
         </base-button>
       </div>
