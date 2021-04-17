@@ -1,26 +1,26 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <base-header></base-header>
+    <home-page v-if="loggedIn === false"></home-page>
+    <coaches-list v-else></coaches-list>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import BaseHeader from './components/BaseHeader'
+import CoachesList from './components/CoachesList.vue'
+import HomePage from './components/HomePage'
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
+    BaseHeader,
+    HomePage,
+    CoachesList,
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.loggedIn
+    },
+  },
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
