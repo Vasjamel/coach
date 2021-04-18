@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  props: ['id', 'name', 'email', 'photoUrl', 'description', 'area'],
+  props: ['name', 'email', 'photoUrl', 'description', 'area'],
   computed: {
     computedName() {
       return this.name.toUpperCase()

@@ -1,11 +1,10 @@
 <template>
   <div class="content-center">
-    <h1>NOW YOU WILL SEE</h1>
+    <search-form></search-form>
     <ul class="w-full text-center">
       <coach-card
-        v-for="coach in this.$store.state.coaches"
-        :key="coach.id"
-        :id="coach.id"
+        v-for="coach in this.$store.getters.coaches"
+        :key="coach.email"
         :name="coach.name"
         :email="coach.email"
         :photoUrl="coach.photoUrl"
@@ -18,9 +17,14 @@
 
 <script>
 import CoachCard from './CoachCard'
+import SearchForm from './SearchForm'
 export default {
   components: {
     CoachCard,
+    SearchForm,
+  },
+  created() {
+    this.$store.dispatch('loadCoaches')
   },
 }
 </script>

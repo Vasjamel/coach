@@ -9,7 +9,7 @@
           type="text"
           id="coach-name"
           name="coach-name"
-          v-model="$store.state.newCoach.name"
+          v-model="$store.getters.newCoach.name"
         />
       </div>
     </div>
@@ -22,7 +22,7 @@
           type="email"
           id="coach-email"
           name="coach-email"
-          v-model="$store.state.newCoach.email"
+          v-model="$store.getters.newCoach.email"
         />
       </div>
     </div>
@@ -35,7 +35,7 @@
           type="text"
           id="coach-description"
           name="coach-description"
-          v-model="$store.state.newCoach.description"
+          v-model="$store.getters.newCoach.description"
         />
       </div>
     </div>
@@ -48,37 +48,53 @@
           type="url"
           id="coach-url"
           name="coach-url"
-          v-model="$store.state.newCoach.photoUrl"
+          v-model="$store.getters.newCoach.photoUrl"
         />
       </div>
     </div>
 
     <div>
-      This coach coaches will coach us on:
+      This coach will coach us on:
       <div class="flexbox">
         <div class="m-4">
           <label for="coach-area">
             Frontend
           </label>
-          <input type="checkbox" v-model="$store.state.newCoach.area" />
+          <input
+            type="checkbox"
+            value="frontend"
+            v-model="$store.getters.newCoach.area"
+          />
         </div>
         <div class="m-4">
           <label for="coach-area">
             Backend
           </label>
-          <input type="checkbox" v-model="$store.state.newCoach.area" />
+          <input
+            type="checkbox"
+            value="backend"
+            v-model="$store.getters.newCoach.area"
+          />
         </div>
         <div class="m-4">
           <label for="coach-area">
             Vue
           </label>
-          <input type="checkbox" v-model="$store.state.newCoach.area" />
+          <input
+            type="checkbox"
+            value="vue"
+            v-model="$store.getters.newCoach.area"
+          />
         </div>
         <div class="m-4">
           <label for="coach-area">
             Other
           </label>
-          <input type="checkbox" v-model="$store.state.newCoach.area" />
+          <input
+            type="checkbox"
+            value="other"
+            v-model="$store.getters.newCoach.area"
+          />
         </div>
       </div>
     </div>
@@ -93,7 +109,7 @@
 export default {
   methods: {
     submitForm() {
-      this.$store.commit('registerForm')
+      this.$store.dispatch('registerForm')
     },
   },
 }

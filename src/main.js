@@ -1,10 +1,12 @@
 import { createApp } from 'vue'
 import { createStore } from 'vuex'
-import App from './App.vue'
+
 import './tailwind.css'
-import BaseButton from './components/BaseButton'
-import mainStore from './store/store'
 import axios from 'axios'
+import mainStore from './store/store'
+
+import App from './App.vue'
+import BaseButton from './components/BaseButton'
 
 axios.defaults.baseURL =
   'https://couch-finder-51ae1-default-rtdb.firebaseio.com'
