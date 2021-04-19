@@ -110,6 +110,7 @@ export default {
   methods: {
     submitForm() {
       this.$store.dispatch('registerForm')
+      this.$router.push('/coaches')
     },
   },
 }

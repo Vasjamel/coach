@@ -5,6 +5,7 @@ const mainStore = {
     return {
       loggedIn: false,
       coaches: [],
+      filteredCoaches: [],
       newCoach: {
         name: '',
         email: '',
@@ -12,7 +13,7 @@ const mainStore = {
         description: '',
         area: [],
       },
-      search: '',
+      searchText: '',
     }
   },
 
@@ -26,9 +27,6 @@ const mainStore = {
     loggedIn(state) {
       return state.loggedIn
     },
-    search(state) {
-      return state.search
-    },
   },
 
   mutations: {
@@ -41,7 +39,7 @@ const mainStore = {
     },
 
     loadCoaches(state, payload) {
-      state.coaches = payload.data
+      state.coaches = payload
     },
 
     registerForm(state) {
@@ -73,13 +71,22 @@ const mainStore = {
       context.commit('registerForm')
     },
 
-    loadCoaches(context) {
+    downloadCoaches(context) {
       axios.get('/coaches.json').then((response) => {
-        if (response.data) {
-          context.commit('loadCoaches', response)
-        } else {
-          context.commit('loadCoaches', null)
+        const receivedArray = []
+        for (let each in response.data) {
+          const everyCoach = {
+            id: each,
+            name: response.data[each].name,
+            email: response.data[each].email,
+            photoUrl: response.data[each].photoUrl,
+            description: response.data[each].description,
+            area: response.data[each].area,
+          }
+          receivedArray.push(everyCoach)
         }
+        console.log(receivedArray)
+        context.commit('loadCoaches', receivedArray)
       })
     },
   },

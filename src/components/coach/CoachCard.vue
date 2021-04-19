@@ -1,12 +1,8 @@
 <template>
-  <li class="m-12 p-2  w-1/4 shadow-2xl border rounded-xl">
-    <div class="border-box text-center">
+  <li class="m-8 border border-solid rounded-xl">
+    <base-card>
       <div>
-        <img
-          class="h-40 w-full rounded-xl"
-          :src="photoUrl"
-          :alt="computedName"
-        />
+        <img class="rounded-xl" :src="photoUrl" :alt="computedName" />
       </div>
       <div class="mb-20">
         <p class="h-4 font-bold text-2xl rounded-xl">
@@ -22,9 +18,11 @@
         <p class="text-sm p-1">{{ description }}</p>
       </div>
       <div>
-        <base-button class="bg-green-200 rounded-xl">Contact me</base-button>
+        <base-button class="bg-green-200 rounded-xl" @click="contact"
+          >Contact me</base-button
+        >
       </div>
-    </div>
+    </base-card>
   </li>
 </template>
 
@@ -34,6 +32,11 @@ export default {
   computed: {
     computedName() {
       return this.name.toUpperCase()
+    },
+  },
+  methods: {
+    contact() {
+      this.$router.push('/contact')
     },
   },
 }
