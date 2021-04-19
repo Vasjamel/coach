@@ -7,7 +7,15 @@
     <base-button @click="$store.dispatch('downloadCoaches')">
       Refresh
     </base-button>
-    <ul class="w-full text-center">
+    <input
+      type="text"
+      class="bg-red-400"
+      @input="filterCoaches(ontext)"
+      v-model="text"
+    />
+    <p v-if="ontext && ontextLength < 1">Sorry, we cannot find this</p>
+    <base-button>Render</base-button>
+    <ul v-if="this.filtered.length < 1" class="w-full text-center">
       <coach-card
         v-for="coach in this.$store.getters.coaches"
         :key="coach.id"
@@ -18,6 +26,19 @@
         :description="coach.description"
         :area="coach.area"
       ></coach-card>
+    </ul>
+    <ul v-else>
+      <coach-card
+        v-for="coach in this.filtered"
+        :key="coach.id"
+        :id="coach.id"
+        :name="coach.name"
+        :email="coach.email"
+        :photoUrl="coach.photoUrl"
+        :description="coach.description"
+        :area="coach.area"
+      >
+      </coach-card>
     </ul>
   </div>
 </template>
@@ -33,11 +54,21 @@ export default {
 
   data() {
     return {
+      text: '',
+      filtered: '',
       pages: [],
       currentPage: 1,
       coachesToRender: [],
       coachesPerPage: 10,
     }
+  },
+  computed: {
+    ontext() {
+      return this.text
+    },
+    ontextLength() {
+      return this.text.length
+    },
   },
 
   methods: {
@@ -45,10 +76,11 @@ export default {
       this.$router.push('/addcoach')
     },
 
-    renderCoaches() {
-      this.$store.getters.coaches.forEach((coach) => {
-        this.coachesToRender.push(coach)
-      })
+    filterCoaches(value) {
+      const filtered = this.$store.getters.coaches.filter((coach) =>
+        coach.name.toLowerCase().includes(value.toLowerCase())
+      )
+      this.filtered = filtered
     },
   },
 

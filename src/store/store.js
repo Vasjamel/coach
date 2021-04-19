@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-const mainStore = {
+const store = {
   state() {
     return {
       loggedIn: false,
-      coaches: [],
+      coaches: null,
       filteredCoaches: [],
       newCoach: {
         name: '',
@@ -85,11 +85,11 @@ const mainStore = {
           }
           receivedArray.push(everyCoach)
         }
-        console.log(receivedArray)
+        console.log('receivedArray', receivedArray)
         context.commit('loadCoaches', receivedArray)
       })
     },
   },
 }
 
-export default mainStore
+export default store
