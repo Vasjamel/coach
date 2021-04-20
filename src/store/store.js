@@ -85,7 +85,6 @@ const store = {
           }
           receivedArray.push(everyCoach)
         }
-        console.log('receivedArray', receivedArray)
         context.commit('loadCoaches', receivedArray)
       })
     },

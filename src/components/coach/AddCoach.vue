@@ -99,7 +99,9 @@
       </div>
     </div>
 
-    <base-button class="m-2 bg-red-600 text-white rounded" @click="submitForm"
+    <base-button
+      class="m-2 bg-red-600 text-white rounded"
+      @click.prevent="submitForm"
       >Submit</base-button
     >
   </div>

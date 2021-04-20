@@ -1,23 +1,29 @@
 <template>
   <div class="content-center">
     <search-form></search-form>
-    <base-button @click.prevent="goToAddCoach">
+
+    <base-button @click="goToAddCoach">
       AddCoach
     </base-button>
+
     <base-button @click="$store.dispatch('downloadCoaches')">
       Refresh
     </base-button>
+
     <input
       type="text"
       class="bg-red-400"
       @input="filterCoaches(ontext)"
       v-model="text"
     />
-    <p v-if="ontext && ontextLength < 1">Sorry, we cannot find this</p>
-    <base-button>Render</base-button>
-    <ul v-if="this.filtered.length < 1" class="w-full text-center">
+
+    <p v-if="!toShow">
+      There are no coaches. Please registed some!
+    </p>
+
+    <ul v-else class="w-full text-center">
       <coach-card
-        v-for="coach in this.$store.getters.coaches"
+        v-for="coach in toShow"
         :key="coach.id"
         :id="coach.id"
         :name="coach.name"
@@ -26,19 +32,6 @@
         :description="coach.description"
         :area="coach.area"
       ></coach-card>
-    </ul>
-    <ul v-else>
-      <coach-card
-        v-for="coach in this.filtered"
-        :key="coach.id"
-        :id="coach.id"
-        :name="coach.name"
-        :email="coach.email"
-        :photoUrl="coach.photoUrl"
-        :description="coach.description"
-        :area="coach.area"
-      >
-      </coach-card>
     </ul>
   </div>
 </template>
@@ -55,36 +48,42 @@ export default {
   data() {
     return {
       text: '',
-      filtered: '',
-      pages: [],
-      currentPage: 1,
-      coachesToRender: [],
-      coachesPerPage: 10,
+      filtered: [],
     }
   },
   computed: {
     ontext() {
       return this.text
     },
-    ontextLength() {
-      return this.text.length
+    toShow() {
+      return this.filtered.length < 1
+        ? this.$store.getters.coaches
+        : this.filtered
     },
   },
 
   methods: {
     goToAddCoach() {
-      this.$router.push('/addcoach')
+      this.$router.push({ path: '/addcoach' })
     },
 
     filterCoaches(value) {
-      const filtered = this.$store.getters.coaches.filter((coach) =>
+      const filteredName = this.$store.getters.coaches.filter((coach) =>
         coach.name.toLowerCase().includes(value.toLowerCase())
       )
+      const filteredDescription = this.$store.getters.coaches.filter((coach) =>
+        coach.description.toLowerCase().includes(value.toLowerCase())
+      )
+      const filtered = new Set([...filteredName, ...filteredDescription])
+
       this.filtered = filtered
     },
   },
 
   created() {
+    this.$store.dispatch('downloadCoaches')
+  },
+  beforeUpdate() {
     this.$store.dispatch('downloadCoaches')
   },
 }
