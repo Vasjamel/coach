@@ -5,7 +5,7 @@ import HomePage from './../components/userPages/HomePage'
 import AddCoach from './../components/coach/AddCoach'
 import LoginForm from './../components/userPages/LoginForm'
 import SignupForm from './../components/userPages/SignupForm'
-import ContactCoach from './../components/coach/ContactCoach'
+import MessagesList from './../components/messages/MessagesList'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -16,7 +16,7 @@ const router = createRouter({
     { path: '/login', component: LoginForm },
     { path: '/signup', component: SignupForm },
     { path: '/:inactive(.*)', component: HomePage },
-    { path: '/contact', component: ContactCoach },
+    { path: '/messages', component: MessagesList },
   ],
 })
 

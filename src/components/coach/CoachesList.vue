@@ -10,11 +10,13 @@
       Refresh
     </base-button>
 
+    <base-button @click="seeMessages">See messages</base-button>
+
     <input
       type="text"
       class="bg-red-400"
       @input="filterCoaches(ontext)"
-      v-model="text"
+      v-model.trim="text"
     />
 
     <p v-if="!toShow">
@@ -49,6 +51,9 @@ export default {
     return {
       text: '',
       filtered: [],
+      perPage: 10,
+      pages: [],
+      currentPage: 1,
     }
   },
   computed: {
@@ -57,8 +62,12 @@ export default {
     },
     toShow() {
       return this.filtered.length < 1
-        ? this.$store.getters.coaches
+        ? this.$store.state.coaches
         : this.filtered
+    },
+
+    toShowSize() {
+      return this.toShow ? this.toShow.size : null
     },
   },
 
@@ -77,14 +86,36 @@ export default {
       const filtered = new Set([...filteredName, ...filteredDescription])
 
       this.filtered = filtered
+      this.calculatePages()
+    },
+
+    calculatePages() {
+      let quantityOfPages = null
+      if (this.toShow) {
+        quantityOfPages = Math.ceil(this.toShowSize / this.perPage)
+      }
+      for (let i = 1; i <= quantityOfPages; i++) {
+        this.pages.push(i)
+      }
+      console.log('pages:', this.pages)
+    },
+
+    paginate(coaches) {
+      const page = this.currentPage
+      let perPage = this.perPage
+      let from = page * perPage - perPage
+      let to = page * perPage
+      return coaches.slice(from, to)
+    },
+
+    seeMessages() {
+      this.$router.push('/messages')
     },
   },
 
-  created() {
+  beforeMount() {
     this.$store.dispatch('downloadCoaches')
-  },
-  beforeUpdate() {
-    this.$store.dispatch('downloadCoaches')
+    this.calculatePages()
   },
 }
 </script>

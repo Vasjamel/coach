@@ -28,7 +28,7 @@
         <label for="coach-area">
           Other
         </label>
-        <input type="checkbox" checked value="other" />
+        <input type="checkbox" checked value="other" @change="pes" />
       </div>
     </div>
   </div>

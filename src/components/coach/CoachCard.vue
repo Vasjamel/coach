@@ -18,25 +18,61 @@
         <p class="text-sm p-1">{{ description }}</p>
       </div>
       <div>
-        <base-button class="bg-green-200 rounded-xl" @click="contact"
+        <base-button class="bg-green-200 rounded-xl" @click="contact(id)"
           >Contact me</base-button
         >
+        <contact-coach
+          v-if="seeContactForm"
+          :correctCoach="thisCoach"
+          @hide-form="hide"
+          @send-form="send"
+        >
+        </contact-coach>
       </div>
     </base-card>
   </li>
 </template>
 
 <script>
+import axios from 'axios'
+import ContactCoach from './ContactCoach.vue'
 export default {
-  props: ['name', 'email', 'photoUrl', 'description', 'area'],
+  components: {
+    ContactCoach,
+  },
+  props: ['name', 'email', 'photoUrl', 'description', 'area', 'id'],
+  data() {
+    return {
+      seeContactForm: false,
+      thisCoach: null,
+    }
+  },
   computed: {
     computedName() {
       return this.name.toUpperCase()
     },
   },
   methods: {
-    contact() {
-      this.$router.push('/contact')
+    contact(id) {
+      this.seeContactForm = true
+      const correctCoach = this.$store.getters.coaches.find(
+        (coach) => coach.id === id
+      )
+      console.log(correctCoach)
+      this.thisCoach = correctCoach
+    },
+    hide() {
+      this.seeContactForm = false
+    },
+    send(message) {
+      const createMessage = {
+        coach: this.thisCoach.name,
+        message: message,
+      }
+      axios
+        .post('/messages.json', createMessage)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
     },
   },
 }

@@ -5,7 +5,8 @@ const store = {
     return {
       loggedIn: false,
       coaches: null,
-      filteredCoaches: [],
+      messages: null,
+      filterArea: [],
       newCoach: {
         name: '',
         email: '',
@@ -13,7 +14,6 @@ const store = {
         description: '',
         area: [],
       },
-      searchText: '',
     }
   },
 
@@ -26,6 +26,12 @@ const store = {
     },
     loggedIn(state) {
       return state.loggedIn
+    },
+    filterArea(state) {
+      return state.filterArea
+    },
+    getMessages(state) {
+      return state.messages
     },
   },
 
@@ -40,6 +46,9 @@ const store = {
 
     loadCoaches(state, payload) {
       state.coaches = payload
+    },
+    loadMessages(state, payload) {
+      state.messages = [...payload]
     },
 
     registerForm(state) {
@@ -71,6 +80,10 @@ const store = {
       context.commit('registerForm')
     },
 
+    searchAreaChange(context) {
+      context.commit('changeSearchArea')
+    },
+
     downloadCoaches(context) {
       axios.get('/coaches.json').then((response) => {
         const receivedArray = []
@@ -86,6 +99,22 @@ const store = {
           receivedArray.push(everyCoach)
         }
         context.commit('loadCoaches', receivedArray)
+      })
+    },
+    downloadMessages(context) {
+      axios.get('messages.json').then((response) => {
+        console.log(response)
+        const receivedArray = []
+        for (let each in response.data) {
+          const eachMessage = {
+            messageId: each,
+            coach: response.data[each].coach,
+            message: response.data[each].message,
+          }
+          receivedArray.push(eachMessage)
+        }
+        console.log(receivedArray)
+        context.commit('loadMessages', receivedArray)
       })
     },
   },

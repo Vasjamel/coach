@@ -111,8 +111,12 @@
 export default {
   methods: {
     submitForm() {
-      this.$store.dispatch('registerForm')
-      this.$router.push('/coaches')
+      if (this.$store.getters.newCoach.area.length > 0) {
+        this.$store.dispatch('registerForm')
+        this.$router.push('/coaches')
+      } else {
+        alert('please indicate at least 1 area')
+      }
     },
   },
 }
