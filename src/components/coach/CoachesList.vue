@@ -19,22 +19,29 @@
       v-model.trim="text"
     />
 
-    <p v-if="!toShow">
+    <base-card v-if="!toShow">
       There are no coaches. Please registed some!
-    </p>
-
-    <ul v-else class="w-full text-center">
-      <coach-card
-        v-for="coach in toShow"
-        :key="coach.id"
-        :id="coach.id"
-        :name="coach.name"
-        :email="coach.email"
-        :photoUrl="coach.photoUrl"
-        :description="coach.description"
-        :area="coach.area"
-      ></coach-card>
-    </ul>
+    </base-card>
+    <div v-else>
+      Pages:
+      <div v-for="page in pages" :key="page">
+        <base-button @click="changePage(page)">
+          {{ page }}
+        </base-button>
+      </div>
+      <ul class="w-full text-center">
+        <coach-card
+          v-for="coach in paginate(toShow)"
+          :key="coach.id"
+          :id="coach.id"
+          :name="coach.name"
+          :email="coach.email"
+          :photoUrl="coach.photoUrl"
+          :description="coach.description"
+          :area="coach.area"
+        ></coach-card>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -50,6 +57,7 @@ export default {
   data() {
     return {
       text: '',
+      coachesArray: [],
       filtered: null,
       perPage: 3,
       pages: [],
@@ -64,17 +72,27 @@ export default {
       return !this.filtered ? this.$store.state.coaches : this.filtered
     },
   },
+  watch: {
+    toShow() {
+      this.paginate(this.toShow)
+    },
+  },
 
   methods: {
     goToAddCoach() {
       this.$router.push({ path: '/addcoach' })
     },
 
+    changePage(page) {
+      console.log(page)
+      this.currentPage = page
+    },
+
     filterCoaches(value) {
-      const filteredName = this.$store.getters.coaches.filter((coach) =>
+      const filteredName = this.toShow.filter((coach) =>
         coach.name.toLowerCase().includes(value.toLowerCase())
       )
-      const filteredDescription = this.$store.getters.coaches.filter((coach) =>
+      const filteredDescription = this.toShow.filter((coach) =>
         coach.description.toLowerCase().includes(value.toLowerCase())
       )
       const filteredDuplicates = [...filteredName, ...filteredDescription]
@@ -84,6 +102,7 @@ export default {
       )
 
       this.filtered = withoutDuplicates
+
       this.calculatePages()
       this.paginate(this.filtered)
     },
@@ -91,9 +110,7 @@ export default {
     calculatePages() {
       this.pages = []
       let quantityOfPages = null
-      if (this.toShow) {
-        quantityOfPages = Math.ceil(this.toShow.length / this.perPage)
-      }
+      quantityOfPages = Math.ceil(this.toShow.length / this.perPage)
       for (let i = 1; i <= quantityOfPages; i++) {
         this.pages.push(i)
       }
@@ -115,7 +132,11 @@ export default {
 
   beforeMount() {
     this.$store.dispatch('downloadCoaches')
+  },
+
+  beforeUpdate() {
     this.calculatePages()
+    this.paginate(this.toShow)
   },
 }
 </script>

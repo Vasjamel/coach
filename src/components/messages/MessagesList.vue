@@ -3,6 +3,7 @@
     <div>
       <h1>Messages:</h1>
       <message-card
+        class="m-12"
         v-for="message in arrayOfMessages"
         :key="message.messageId"
         :id="message.messageId"
