@@ -89,10 +89,10 @@ export default {
     },
 
     filterCoaches(value) {
-      const filteredName = this.toShow.filter((coach) =>
+      const filteredName = this.$store.getters.coaches.filter((coach) =>
         coach.name.toLowerCase().includes(value.toLowerCase())
       )
-      const filteredDescription = this.toShow.filter((coach) =>
+      const filteredDescription = this.$store.getters.coaches.filter((coach) =>
         coach.description.toLowerCase().includes(value.toLowerCase())
       )
       const filteredDuplicates = [...filteredName, ...filteredDescription]
@@ -102,7 +102,6 @@ export default {
       )
 
       this.filtered = withoutDuplicates
-
       this.calculatePages()
       this.paginate(this.filtered)
     },
