@@ -50,8 +50,8 @@ export default {
   data() {
     return {
       text: '',
-      filtered: [],
-      perPage: 10,
+      filtered: null,
+      perPage: 3,
       pages: [],
       currentPage: 1,
     }
@@ -61,13 +61,7 @@ export default {
       return this.text
     },
     toShow() {
-      return this.filtered.length < 1
-        ? this.$store.state.coaches
-        : this.filtered
-    },
-
-    toShowSize() {
-      return this.toShow ? this.toShow.size : null
+      return !this.filtered ? this.$store.state.coaches : this.filtered
     },
   },
 
@@ -83,16 +77,22 @@ export default {
       const filteredDescription = this.$store.getters.coaches.filter((coach) =>
         coach.description.toLowerCase().includes(value.toLowerCase())
       )
-      const filtered = new Set([...filteredName, ...filteredDescription])
+      const filteredDuplicates = [...filteredName, ...filteredDescription]
 
-      this.filtered = filtered
+      const withoutDuplicates = filteredDuplicates.filter(
+        (item, pos) => filteredDuplicates.indexOf(item) == pos
+      )
+
+      this.filtered = withoutDuplicates
       this.calculatePages()
+      this.paginate(this.filtered)
     },
 
     calculatePages() {
+      this.pages = []
       let quantityOfPages = null
       if (this.toShow) {
-        quantityOfPages = Math.ceil(this.toShowSize / this.perPage)
+        quantityOfPages = Math.ceil(this.toShow.length / this.perPage)
       }
       for (let i = 1; i <= quantityOfPages; i++) {
         this.pages.push(i)
