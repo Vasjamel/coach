@@ -1,8 +1,10 @@
 <template>
-  <li class="m-8 border border-solid rounded-xl">
-    <base-card>
+  <li
+    class="border w-full min-w-2x1 max-w-2xl center border-solid rounded-xl flex content-center"
+  >
+    <base-card class="">
       <div>
-        <img class="rounded-xl" :src="photoUrl" :alt="computedName" />
+        <img class="center h-300 w-auto" :src="photoUrl" :alt="computedName" />
       </div>
       <div class="mb-20">
         <p class="h-4 font-bold text-2xl rounded-xl">
@@ -58,7 +60,6 @@ export default {
       const correctCoach = this.$store.getters.coaches.find(
         (coach) => coach.id === id
       )
-      console.log(correctCoach)
       this.thisCoach = correctCoach
     },
     hide() {
