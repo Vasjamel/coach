@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="this.$store.getters.loggedIn">
     <filter-form></filter-form>
     <base-card class="flex">
       <base-button @click="goToAddCoach">

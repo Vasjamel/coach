@@ -37,11 +37,17 @@ const store = {
 
   mutations: {
     logIn(state) {
-      state.loggedIn = true
+      state.loggedIn = !state.loggedIn
     },
 
     logOut(state) {
       state.loggedIn = false
+    },
+
+    setUser(state, payload) {
+      state.token = payload.token
+      state.userId = payload.userId
+      state.tokenExpiration = payload.tokenExpiration
     },
 
     loadCoaches(state, payload) {
@@ -68,6 +74,33 @@ const store = {
   },
 
   actions: {
+    async signUp(context, payload) {
+      const response = await fetch(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDPbLFOBHKzYhiK0NAuVN6ZltT2RCApStk',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            email: payload.email,
+            password: payload.password,
+            returnSecureToken: true,
+          }),
+        }
+      )
+      const responseData = await response.json()
+      console.log(responseData)
+      if (!response.ok) {
+        const error = new Error(
+          responseData.message || 'failed to authenticate'
+        )
+        throw error
+      }
+      context.commit('setUser', {
+        token: responseData.idToken,
+        userId: responseData.localId,
+        tokenExpiration: responseData.expiresIn,
+      })
+    },
+
     logIn(context) {
       context.commit('logIn')
     },

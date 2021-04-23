@@ -3,7 +3,7 @@
     <div>
       <div class="float-right">
         <login-button>
-          <router-link to="/home"> </router-link>
+          <router-link to="/home"></router-link>
         </login-button>
 
         <signup-button>

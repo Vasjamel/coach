@@ -1,6 +1,6 @@
 <template>
   <base-button @click="openLogin">
-    Log In
+    {{ buttonType }}
   </base-button>
 </template>
 
@@ -9,6 +9,11 @@ export default {
   methods: {
     openLogin() {
       this.$router.push('/login')
+    },
+  },
+  computed: {
+    buttonType() {
+      return this.$store.getters.loggedIn ? 'Log Out' : 'Log In'
     },
   },
 }
