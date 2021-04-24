@@ -72,7 +72,7 @@
       <base-card class="flex content-center">
         <ul class="flex content-center text-center">
           <coach-card
-            v-for="coach in paginate(this.toShow)"
+            v-for="coach in paginate(filterCoachesByArea(toShow))"
             :key="coach.id"
             :id="coach.id"
             :name="coach.name"
@@ -101,7 +101,7 @@ export default {
       text: '',
       coachesArray: [],
       filters: { frontend: true, backend: true, vue: true, other: true },
-      abc: [],
+      abc: ['frontend', 'backend', 'vue', 'other'],
       toFilter: [
         {
           name: 'A',
@@ -144,6 +144,18 @@ export default {
   },
 
   methods: {
+    filterCoachesByArea(array) {
+      const fil = array.filter((coach) => {
+        return coach.area.some((i) => this.abc.includes(i))
+      })
+      return fil
+      // return array.filter((coach) => {
+      //   return coach.area.some((area) => {
+      //     return this.abc.includes(area)
+      //   })
+      // })
+    },
+
     goToAddCoach() {
       this.$router.push({ path: '/addcoach' })
     },
@@ -197,6 +209,7 @@ export default {
     console.log('befUpd', this.$store.getters.coaches)
     this.calculatePages()
     this.paginate(this.toShow)
+    console.log('fil:', this.filterCoachesByArea(this.toShow))
   },
 }
 </script>
