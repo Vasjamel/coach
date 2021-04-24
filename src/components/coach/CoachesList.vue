@@ -186,8 +186,9 @@ export default {
     },
   },
 
-  beforeMount() {
-    this.$store.dispatch('downloadCoaches')
+  async created() {
+    await this.$store.dispatch('downloadCoaches')
+    console.log('dispatched', this.$store.getters.coaches)
   },
 
   beforeUpdate() {

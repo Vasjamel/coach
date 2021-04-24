@@ -88,22 +88,21 @@ const store = {
       context.commit('changeSearchArea')
     },
 
-    downloadCoaches(context) {
-      axios.get('/coaches.json').then((response) => {
-        const receivedArray = []
-        for (let each in response.data) {
-          const everyCoach = {
-            id: each,
-            name: response.data[each].name,
-            email: response.data[each].email,
-            photoUrl: response.data[each].photoUrl,
-            description: response.data[each].description,
-            area: response.data[each].area,
-          }
-          receivedArray.push(everyCoach)
+    async downloadCoaches(context) {
+      const response = await axios.get('/coaches.json')
+      const receivedArray = []
+      for (let each in response.data) {
+        const everyCoach = {
+          id: each,
+          name: response.data[each].name,
+          email: response.data[each].email,
+          photoUrl: response.data[each].photoUrl,
+          description: response.data[each].description,
+          area: response.data[each].area,
         }
-        context.commit('loadCoaches', receivedArray)
-      })
+        receivedArray.push(everyCoach)
+      }
+      context.commit('loadCoaches', receivedArray)
     },
     downloadMessages(context) {
       axios.get('messages.json').then((response) => {
