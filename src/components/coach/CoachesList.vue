@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.$store.getters.loggedIn">
+  <div>
     <!-- <filter-form></filter-form> -->
     <base-card class="flexbox content-center">
       <div class="flex content-center mx-8">
@@ -56,6 +56,7 @@
         />
       </base-card>
     </base-card>
+
     <base-card v-if="!toShow">
       There are no coaches. Please registed some!
     </base-card>
@@ -67,10 +68,11 @@
           </base-button>
         </div>
       </base-card>
+
       <base-card class="flex content-center">
         <ul class="flex content-center text-center">
           <coach-card
-            v-for="coach in paginate(toShow)"
+            v-for="coach in paginate(this.toShow)"
             :key="coach.id"
             :id="coach.id"
             :name="coach.name"
@@ -132,7 +134,7 @@ export default {
       return this.text
     },
     toShow() {
-      return !this.filtered ? this.$store.state.coaches : this.filtered
+      return this.filtered ? this.filtered : this.$store.getters.coaches
     },
   },
   watch: {
@@ -192,6 +194,7 @@ export default {
   },
 
   beforeUpdate() {
+    console.log('befUpd', this.$store.getters.coaches)
     this.calculatePages()
     this.paginate(this.toShow)
   },
