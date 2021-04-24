@@ -1,6 +1,39 @@
 <template>
   <div v-if="this.$store.getters.loggedIn">
-    <filter-form></filter-form>
+    <!-- <filter-form></filter-form> -->
+    <base-card class="flexbox content-center">
+      <div class="flex content-center mx-8">
+        <base-card class="m-4 mx-10">
+          <label for="coach-area">
+            Frontend
+          </label>
+          <input type="checkbox" v-model="abc" id="frontend" value="frontend" />
+        </base-card>
+        <base-card class="m-4">
+          <label for="coach-area">
+            Backend
+          </label>
+          <input type="checkbox" v-model="abc" value="backend" id="backend" />
+        </base-card>
+        <base-card class="m-4">
+          <label for="coach-area">
+            Vue
+          </label>
+          <input type="checkbox" v-model="abc" value="vue" id="vue" />
+        </base-card>
+        <base-card class="m-4">
+          <label for="coach-area">
+            Other
+          </label>
+          <input type="checkbox" v-model="abc" value="other" id="other" />
+        </base-card>
+        <ul>
+          <li v-for="item in filteredList" :key="item.name">
+            {{ item.name }} / {{ item.categories }}
+          </li>
+        </ul>
+      </div>
+    </base-card>
     <base-card class="flex">
       <base-button @click="goToAddCoach">
         AddCoach
@@ -54,11 +87,11 @@
 
 <script>
 import CoachCard from './CoachCard'
-import FilterForm from './FilterForm'
+// import FilterForm from './FilterForm'
 export default {
   components: {
     CoachCard,
-    FilterForm,
+    // FilterForm,
   },
 
   data() {
@@ -66,6 +99,21 @@ export default {
       text: '',
       coachesArray: [],
       filters: { frontend: true, backend: true, vue: true, other: true },
+      abc: [],
+      toFilter: [
+        {
+          name: 'A',
+          categories: ['vue'],
+        },
+        {
+          name: 'B',
+          categories: ['frontend'],
+        },
+        {
+          name: 'C',
+          categories: ['vue', 'other'],
+        },
+      ],
       filtered: null,
       perPage: 3,
       pages: [],
@@ -73,6 +121,13 @@ export default {
     }
   },
   computed: {
+    filteredList() {
+      return this.toFilter.filter((el) => {
+        return el.categories.some((i) => {
+          return this.abc.includes(i)
+        })
+      })
+    },
     ontext() {
       return this.text
     },
@@ -97,16 +152,10 @@ export default {
     },
 
     filterCoaches(value) {
-      const filteredName = this.$store.getters.coaches.filter((coach) =>
-        coach.name.toLowerCase().includes(value.toLowerCase())
-      )
-      const filteredDescription = this.$store.getters.coaches.filter((coach) =>
-        coach.description.toLowerCase().includes(value.toLowerCase())
-      )
-      const filteredDuplicates = [...filteredName, ...filteredDescription]
-
-      const withoutDuplicates = filteredDuplicates.filter(
-        (item, pos) => filteredDuplicates.indexOf(item) == pos
+      const withoutDuplicates = this.$store.getters.coaches.filter(
+        (coach) =>
+          coach.name.toLowerCase().includes(value.toLowerCase()) ||
+          coach.description.toLowerCase().includes(value.toLowerCase())
       )
 
       this.filtered = withoutDuplicates

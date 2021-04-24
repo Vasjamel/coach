@@ -3,17 +3,9 @@ import axios from 'axios'
 const store = {
   state() {
     return {
-      loggedIn: false,
+      loggedIn: true,
       coaches: null,
       messages: null,
-      filterArea: [],
-      newCoach: {
-        name: '',
-        email: '',
-        photoUrl: '',
-        description: '',
-        area: [],
-      },
     }
   },
 
@@ -21,14 +13,8 @@ const store = {
     coaches(state) {
       return state.coaches
     },
-    newCoach(state) {
-      return state.newCoach
-    },
     loggedIn(state) {
       return state.loggedIn
-    },
-    filterArea(state) {
-      return state.filterArea
     },
     getMessages(state) {
       return state.messages
@@ -55,21 +41,6 @@ const store = {
     },
     loadMessages(state, payload) {
       state.messages = [...payload]
-    },
-
-    registerForm(state) {
-      axios
-        .post('/coaches.json', state.newCoach)
-        .then(() => {
-          state.newCoach = {
-            name: '',
-            email: '',
-            photoUrl: '',
-            description: '',
-            area: [],
-          }
-        })
-        .catch((err) => console.log(err))
     },
   },
 

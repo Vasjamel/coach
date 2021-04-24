@@ -14,7 +14,7 @@
             type="text"
             id="coach-name"
             name="coach-name"
-            v-model.trim="$store.getters.newCoach.name"
+            v-model.trim="newCoach.name"
           />
         </div>
       </base-card>
@@ -27,7 +27,7 @@
             type="email"
             id="coach-email"
             name="coach-email"
-            v-model.trim="$store.getters.newCoach.email"
+            v-model.trim="newCoach.email"
           />
         </div>
       </div>
@@ -40,7 +40,7 @@
             type="text"
             id="coach-description"
             name="coach-description"
-            v-model="$store.getters.newCoach.description"
+            v-model.trim="newCoach.description"
           />
         </div>
       </div>
@@ -53,7 +53,7 @@
             type="url"
             id="coach-url"
             name="coach-url"
-            v-model="$store.getters.newCoach.photoUrl"
+            v-model.trim="newCoach.photoUrl"
           />
         </div>
       </div>
@@ -67,8 +67,9 @@
             </label>
             <input
               type="checkbox"
+              id="frontend"
               value="frontend"
-              v-model="$store.getters.newCoach.area"
+              v-model="newCoach.area"
             />
           </div>
           <div class="m-4">
@@ -77,8 +78,9 @@
             </label>
             <input
               type="checkbox"
+              id="backend"
               value="backend"
-              v-model="$store.getters.newCoach.area"
+              v-model="newCoach.area"
             />
           </div>
           <div class="m-4">
@@ -87,8 +89,9 @@
             </label>
             <input
               type="checkbox"
+              id="vue"
               value="vue"
-              v-model="$store.getters.newCoach.area"
+              v-model="newCoach.area"
             />
           </div>
           <div class="m-4">
@@ -97,8 +100,9 @@
             </label>
             <input
               type="checkbox"
+              id="other"
               value="other"
-              v-model="$store.getters.newCoach.area"
+              v-model="newCoach.area"
             />
           </div>
         </div>
@@ -106,7 +110,7 @@
       <div v-if="!isValid">
         <p>Please insert the correct data!</p>
         <p>Note that all the fields are mandatory!</p>
-        <p>At least 1 checkbox should be ticked</p>
+        <p>(At least 1 checkbox should be ticked)</p>
       </div>
       <base-button
         class="m-2 bg-red-600 text-white rounded"
@@ -118,29 +122,65 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
       isValid: true,
+      newCoach: {
+        name: '',
+        email: '',
+        photoUrl: '',
+        description: '',
+        area: [],
+      },
     }
   },
   methods: {
     checkForm() {
-      this.$store.getters.newCoach.name === '' ? (this.isValid = false) : null
-      this.$store.getters.newCoach.email === '' ? (this.isValid = false) : null
-      this.$store.getters.newCoach.description === ''
-        ? (this.isValid = false)
-        : null
-      this.$store.getters.newCoach.area.length === 0
-        ? (this.isValid = false)
-        : null
+      if (
+        this.newCoach.name === '' ||
+        this.newCoach.email === '' ||
+        !this.newCoach.email.includes('@') ||
+        this.newCoach.description === '' ||
+        this.newCoach.area.length === 0
+      ) {
+        this.isValid = false
+      } else {
+        this.isValid = true
+      }
+    },
+
+    registerForm() {
+      axios
+        .post('/coaches.json', this.newCoach)
+        .then((res) => {
+          console.log(res)
+          this.newCoach = {
+            name: '',
+            email: '',
+            photoUrl: '',
+            description: '',
+            area: [],
+          }
+        })
+        .catch((err) => console.log(err))
     },
 
     submitForm() {
       this.checkForm()
       if (this.isValid) {
-        this.$store.dispatch('registerForm')
+        this.registerForm()
         this.$router.push('/coaches')
+        this.$store.dispatch('downloadCoaches')
+      } else {
+        this.newCoach = {
+          name: '',
+          email: '',
+          photoUrl: '',
+          description: '',
+          area: [],
+        }
       }
     },
   },
