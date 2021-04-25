@@ -27,11 +27,6 @@
           </label>
           <input type="checkbox" v-model="abc" value="other" id="other" />
         </base-card>
-        <ul>
-          <li v-for="item in filteredList" :key="item.name">
-            {{ item.name }} / {{ item.categories }}
-          </li>
-        </ul>
       </div>
     </base-card>
     <base-card class="flex">
@@ -100,22 +95,8 @@ export default {
     return {
       text: '',
       coachesArray: [],
-      filters: { frontend: true, backend: true, vue: true, other: true },
       abc: ['frontend', 'backend', 'vue', 'other'],
-      toFilter: [
-        {
-          name: 'A',
-          categories: ['vue'],
-        },
-        {
-          name: 'B',
-          categories: ['frontend'],
-        },
-        {
-          name: 'C',
-          categories: ['vue', 'other'],
-        },
-      ],
+
       filtered: null,
       perPage: 3,
       pages: [],
@@ -139,21 +120,16 @@ export default {
   },
   watch: {
     toShow() {
-      this.paginate(this.toShow)
+      this.paginate(this.filterCoachesByArea(this.toShow))
     },
   },
 
   methods: {
     filterCoachesByArea(array) {
-      const fil = array.filter((coach) => {
-        return coach.area.some((i) => this.abc.includes(i))
+      const filtersByArea = array.filter((coach) => {
+        return coach.area.some((area) => this.abc.includes(area))
       })
-      return fil
-      // return array.filter((coach) => {
-      //   return coach.area.some((area) => {
-      //     return this.abc.includes(area)
-      //   })
-      // })
+      return filtersByArea
     },
 
     goToAddCoach() {
@@ -181,7 +157,9 @@ export default {
     calculatePages() {
       this.pages = []
       let quantityOfPages = null
-      quantityOfPages = Math.ceil(this.toShow.length / this.perPage)
+      quantityOfPages = Math.ceil(
+        this.filterCoachesByArea(this.toShow).length / this.perPage
+      )
       for (let i = 1; i <= quantityOfPages; i++) {
         this.pages.push(i)
       }
@@ -192,6 +170,7 @@ export default {
       let perPage = this.perPage
       let from = page * perPage - perPage
       let to = page * perPage
+      this.calculatePages()
       return coaches.slice(from, to)
     },
 
@@ -202,14 +181,11 @@ export default {
 
   async created() {
     await this.$store.dispatch('downloadCoaches')
-    console.log('dispatched', this.$store.getters.coaches)
   },
 
   beforeUpdate() {
-    console.log('befUpd', this.$store.getters.coaches)
     this.calculatePages()
     this.paginate(this.toShow)
-    console.log('fil:', this.filterCoachesByArea(this.toShow))
   },
 }
 </script>
