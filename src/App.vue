@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class=" w-screen h-screen bg-white">
     <base-header></base-header>
-    <main class="p-2">
+    <main>
       <router-view></router-view>
     </main>
   </div>

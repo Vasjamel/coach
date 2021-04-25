@@ -1,14 +1,17 @@
 <template>
-  <div class="text-center h-14">
-    <base-card>
-      <h1>PLEASE LOG IN OR SIGN UP!</h1>
-      <div>
-        <login-button></login-button>
+  <div class="p-12 m-12 text-center">
+    <div>
+      <div class="m-8 font-black font-mono bold text-4xl">
+        PLEASE LOG IN TO SEE COACHES!
       </div>
-      <div>
-        <signup-button></signup-button>
+      <login-button class="bg-black text-white rounded-xl "></login-button>
+    </div>
+    <div>
+      <div class="m-8 font-mono font-extrabold text-2x1">
+        Have no account? Sign up for free!
       </div>
-    </base-card>
+      <signup-button class="bg-black text-white rounded-xl "></signup-button>
+    </div>
   </div>
 </template>
 

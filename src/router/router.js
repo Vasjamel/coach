@@ -15,8 +15,9 @@ const router = createRouter({
     { path: '/addcoach', component: AddCoach },
     { path: '/login', component: LoginForm },
     { path: '/signup', component: SignupForm },
-    { path: '/:inactive(.*)', component: HomePage },
     { path: '/messages', component: MessagesList },
+    
+    { path: '/:inactive(.*)', component: HomePage },
   ],
 })
 

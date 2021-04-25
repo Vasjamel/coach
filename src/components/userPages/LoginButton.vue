@@ -1,5 +1,8 @@
 <template>
-  <base-button @click="openLogin">
+  <base-button
+    class=" hover:bg-yellow-400 hover:text-black hover:text-2x1 focus:outline-none"
+    @click="openLogin"
+  >
     {{ buttonType }}
   </base-button>
 </template>

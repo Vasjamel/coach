@@ -1,83 +1,124 @@
 <template>
   <div>
-    <!-- <filter-form></filter-form> -->
-    <base-card class="flexbox content-center">
-      <div class="flex content-center mx-8">
-        <base-card class="m-4 mx-10">
-          <label for="coach-area">
-            Frontend
-          </label>
-          <input type="checkbox" v-model="abc" id="frontend" value="frontend" />
-        </base-card>
-        <base-card class="m-4">
-          <label for="coach-area">
-            Backend
-          </label>
-          <input type="checkbox" v-model="abc" value="backend" id="backend" />
-        </base-card>
-        <base-card class="m-4">
-          <label for="coach-area">
-            Vue
-          </label>
-          <input type="checkbox" v-model="abc" value="vue" id="vue" />
-        </base-card>
-        <base-card class="m-4">
-          <label for="coach-area">
-            Other
-          </label>
-          <input type="checkbox" v-model="abc" value="other" id="other" />
+    <hr />
+    <div v-if="this.$store.getters.loggedIn">
+      <!-- <filter-form></filter-form> -->
+
+      <div class="flex bg-black text-white text-xl content-center">
+        <base-button
+          @click="goToAddCoach"
+          class=" mx-auto hover:text-yellow-400 focus:outline-none"
+        >
+          AddCoach
+        </base-button>
+
+        <base-button
+          class=" mx-auto hover:text-yellow-400  focus:outline-none"
+          @click="$store.dispatch('downloadCoaches')"
+        >
+          Refresh
+        </base-button>
+
+        <base-button
+          class=" mx-auto hover:text-yellow-400  focus:outline-none"
+          @click="seeMessages"
+          >See messages</base-button
+        >
+
+        <base-card class=" mx-auto ">
+          <label for="search" class="hover:text-yellow-400  focus:outline-none"
+            >Search coach by name / description</label
+          >
+          <input
+            id="search"
+            type="text"
+            class="bg-white text-black rounded-xl mx-2 focus:outline-none focus:bg-yellow-400"
+            @input="filterCoaches(ontext)"
+            v-model.trim="text"
+          />
         </base-card>
       </div>
-    </base-card>
-    <base-card class="flex">
-      <base-button @click="goToAddCoach">
-        AddCoach
-      </base-button>
 
-      <base-button @click="$store.dispatch('downloadCoaches')">
-        Refresh
-      </base-button>
+      <div class="text-center text-2xl mt-2">
+        Filter coaches by area of expertise:
+      </div>
+      <div class="flex content-center text-xl bg-black">
+        <base-card class="m-auto bg-black">
+          <label for="coach-area" class="text-white">
+            Frontend
+          </label>
+          <input
+            type="checkbox"
+            v-model="areasToFilter"
+            id="frontend"
+            value="frontend"
+          />
+        </base-card>
+        <base-card class="m-auto bg-black">
+          <label for="coach-area" class="text-white">
+            Backend
+          </label>
+          <input
+            type="checkbox"
+            v-model="areasToFilter"
+            value="backend"
+            id="backend"
+          />
+        </base-card>
+        <base-card class="m-auto bg-black">
+          <label for="coach-area" class="text-white">
+            Vue
+          </label>
+          <input type="checkbox" v-model="areasToFilter" value="vue" id="vue" />
+        </base-card>
+        <base-card class="m-auto bg-black">
+          <label for="coach-area" class="text-white">
+            Other
+          </label>
+          <input
+            type="checkbox"
+            v-model="areasToFilter"
+            value="other"
+            id="other"
+          />
+        </base-card>
+      </div>
 
-      <base-button @click="seeMessages">See messages</base-button>
-
-      <base-card>
-        <label for="search">Search</label>
-        <input
-          id="search"
-          type="text"
-          class="bg-red-400"
-          @input="filterCoaches(ontext)"
-          v-model.trim="text"
-        />
+      <base-card v-if="!toShow">
+        Loading...
       </base-card>
-    </base-card>
-
-    <base-card v-if="!toShow">
-      There are no coaches. Please registed some!
-    </base-card>
-    <div v-else>
-      <base-card class="flex right-8">
-        <div v-for="page in pages" :key="page">
-          <base-button @click="changePage(page)">
-            {{ page }}
-          </base-button>
+      <base-card v-else-if="toShow.length < 1">
+        There are no coaches with these parameters. Please registed
+        some!</base-card
+      >
+      <div v-else>
+        <div v-if="pages.length > 1" class="flex justify-center m-auto">
+          <div>Pages:</div>
+          <div class="m-4" v-for="page in pages" :key="page">
+            <base-button
+              class="bg-white rounded-xl m-auto"
+              @click="changePage(page)"
+            >
+              {{ page }}
+            </base-button>
+          </div>
         </div>
-      </base-card>
 
-      <base-card class="flex content-center">
-        <ul class="flex content-center text-center">
-          <coach-card
-            v-for="coach in paginate(filterCoachesByArea(toShow))"
-            :key="coach.id"
-            :id="coach.id"
-            :name="coach.name"
-            :email="coach.email"
-            :photoUrl="coach.photoUrl"
-            :description="coach.description"
-            :area="coach.area"
-          ></coach-card>
-        </ul>
-      </base-card>
+        <base-card class="flex content-center">
+          <ul class="flex content-center text-center">
+            <coach-card
+              v-for="coach in paginate(filterCoachesByArea(toShow))"
+              :key="coach.id"
+              :id="coach.id"
+              :name="coach.name"
+              :email="coach.email"
+              :photoUrl="coach.photoUrl"
+              :description="coach.description"
+              :area="coach.area"
+            ></coach-card>
+          </ul>
+        </base-card>
+      </div>
     </div>
   </div>
 </template>
@@ -95,7 +136,7 @@ export default {
     return {
       text: '',
       coachesArray: [],
-      abc: ['frontend', 'backend', 'vue', 'other'],
+      areasToFilter: ['frontend', 'backend', 'vue', 'other'],
 
       filtered: null,
       perPage: 3,
@@ -104,13 +145,6 @@ export default {
     }
   },
   computed: {
-    filteredList() {
-      return this.toFilter.filter((el) => {
-        return el.categories.some((i) => {
-          return this.abc.includes(i)
-        })
-      })
-    },
     ontext() {
       return this.text
     },
@@ -127,7 +161,7 @@ export default {
   methods: {
     filterCoachesByArea(array) {
       const filtersByArea = array.filter((coach) => {
-        return coach.area.some((area) => this.abc.includes(area))
+        return coach.area.some((area) => this.areasToFilter.includes(area))
       })
       return filtersByArea
     },

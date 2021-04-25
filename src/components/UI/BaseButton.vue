@@ -1,5 +1,5 @@
 <template>
-  <button>
+  <button class="focus:outline-none">
     <base-card>
       <slot></slot>
     </base-card>

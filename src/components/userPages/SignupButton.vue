@@ -1,5 +1,8 @@
 <template>
-  <base-button v-if="!this.$store.getters.loggedIn" @click="openSignup">
+  <base-button
+    class=" hover:bg-yellow-400 hover:text-black hover:text-2x1 focus:outline-none"
+    @click="openSignup"
+  >
     Sign Up
   </base-button>
 </template>

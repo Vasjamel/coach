@@ -1,24 +1,21 @@
 <template>
-  <div class="p-6 text-white font-serif w-full h-28 bg-green-600">
-    <div>
-      <div class="float-right">
-        <login-button>
-          <router-link to="/home"></router-link>
+  <div class="bg-black font-mono text-white h-36">
+    <div class="block">
+      <div class="float-right m-8">
+        <login-button class="bg-white text-black font-bold rounded-xl m-2">
         </login-button>
 
-        <signup-button>
-          <router-link to="/coaches"></router-link>
+        <signup-button class="bg-white text-black font-bold rounded-xl">
         </signup-button>
       </div>
-
-      <h1 class="text-3xl h-1/2 text-red-400">
-        COACH FINDER
-      </h1>
-    </div>
-    <div>
-      <h6 class="h-1/2 text-red-300 mt-2 ml-14">
+      <div class="text-7xl mx-10 font-bold">
+        <div class="p-2">
+          COACH DISCOVERY
+        </div>
+      </div>
+      <div class=" my-5 text-center text-lg">
         Find the relevant coach!
-      </h6>
+      </div>
     </div>
   </div>
 </template>

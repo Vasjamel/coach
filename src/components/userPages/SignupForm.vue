@@ -1,23 +1,75 @@
 <template>
-  <base-card>
-    <form>
-      <base-card>
-        CREATE ACCOUNT
-        <base-card class>
-          <label for="email">Email:</label>
-          <input type="text" id="email" v-model="user.email"
-        /></base-card>
-      </base-card>
-      <base-card>
-        <base-card>
-          <label for="password">Password (at least 6 characters length):</label>
-          <input type="password" id="password" v-model="user.password"
-        /></base-card>
-        <p></p>
-      </base-card>
-      <base-button @click="create">Create</base-button>
+  <div class="m-8 text-2xl font-mono ">
+    <form class=" m-8 p-2 text-center bg-white rounded-xl">
+      <div class="text-3xl font-extrabold p-4">
+        CREATE AN ACCOUNT
+      </div>
+      <div class="m-8">
+        <div>
+          <label for="username">Email:</label>
+        </div>
+        <div>
+          <input
+            type="text"
+            id="username"
+            v-model="user.email"
+            class="bg-black rounded-xl focus:outline-none focus:text-black  focus:bg-yellow-400 text-white w-1/4"
+          />
+        </div>
+      </div>
+      <div class="m-8">
+        <div>
+          <label for="password"
+            >Password:
+            <div class=" text-sm">(6 characters min)</div></label
+          >
+        </div>
+        <div>
+          <input
+            type="password"
+            id="password"
+            v-model="user.password"
+            class="bg-black rounded-xl focus:outline-none focus:text-black focus:bg-yellow-400  text-white w-1/4"
+          />
+        </div>
+      </div>
+
+      <div class="m-8">
+        <div>
+          <label for="password">Confirm password:</label>
+        </div>
+        <div>
+          <input
+            type="password"
+            id="password"
+            v-model="user.cofirmPassword"
+            class="bg-black rounded-xl focus:outline-none focus:text-black focus:bg-yellow-400  text-white w-1/4"
+          />
+        </div>
+      </div>
+
+      <div>
+        <p v-if="!formIsValid">
+          Email or password is incorrect. <br />
+          Please try again.
+        </p>
+        <div>
+          <base-button
+            @click.prevent="create"
+            class="bg-black rounded-xl text-white hover:bg-yellow-400 hover:text-black hover:text-2x1 focus:outline-none"
+          >
+            Create account
+          </base-button>
+          <base-button
+            @click.prevent="goHome"
+            class="bg-black rounded-xl m-4 text-white hover:bg-red-400 hover:text-black hover:text-2x1 focus:outline-none"
+          >
+            Cancel
+          </base-button>
+        </div>
+      </div>
     </form>
-  </base-card>
+  </div>
 </template>
 
 <script>
@@ -27,8 +79,10 @@ export default {
       user: {
         email: '',
         password: '',
-        isValid: true,
       },
+
+      cofirmPassword: '',
+      formIsValid: true,
     }
   },
 
@@ -38,9 +92,10 @@ export default {
       if (
         this.user.email === '' ||
         !this.user.email.includes('@') ||
-        this.user.password.length < 6
+        this.user.password.length < 6 ||
+        this.cofirmPassword !== this.user.password
       ) {
-        this.isValid = false
+        this.formIsValid = false
       }
     },
 
@@ -50,6 +105,10 @@ export default {
         this.$store.dispatch('signUp', this.user)
         this.$router.push('/coaches')
       }
+    },
+
+    goHome() {
+      this.$router.push('/home')
     },
   },
 }
