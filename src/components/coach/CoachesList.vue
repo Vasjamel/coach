@@ -2,8 +2,6 @@
   <div>
     <hr />
     <div v-if="this.$store.getters.loggedIn">
-      <!-- <filter-form></filter-form> -->
-
       <div class="flex bg-black text-white text-xl content-center">
         <base-button
           @click="goToAddCoach"
@@ -88,7 +86,10 @@
         <the-spinner></the-spinner>
       </base-card>
 
-      <base-card v-else-if="toShow.length < 1">
+      <base-card
+        v-else-if="filterCoachesByArea(toShow).length < 1"
+        class="bg-gray-600 text-white m-20 text-center"
+      >
         There are no coaches with these parameters. Please registed
         some!</base-card
       >
@@ -97,7 +98,7 @@
           <ul class="flex text-center">
             <coaches-card
               class="justify-between items-stretch box-border min-h-full min-w-max max-w-full"
-              v-for="coach in paginate(filterCoachesByArea(toShow))"
+              v-for="coach in paginate(filteredCoachesByArea)"
               :key="coach.id"
               :id="coach.id"
               :name="coach.name"
@@ -149,6 +150,9 @@ export default {
     },
     toShow() {
       return this.filtered ? this.filtered : this.$store.getters.coaches
+    },
+    filteredCoachesByArea() {
+      return this.filterCoachesByArea(this.toShow)
     },
   },
   watch: {
