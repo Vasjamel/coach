@@ -1,5 +1,5 @@
 <template>
-  <div class=" w-screen h-screen bg-white">
+  <div class="w-screen h-screen bg-white">
     <base-header></base-header>
     <main>
       <router-view></router-view>

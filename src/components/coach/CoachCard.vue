@@ -1,26 +1,35 @@
 <template>
   <li
-    class="border w-full min-w-2x1 max-w-2xl center border-solid rounded-xl flex content-center"
+    class=" w-full m-4 min-w-2x1 max-w-2xl center border-8 border-white bg-gray-400 rounded-xl flex content-center"
   >
-    <base-card class="">
-      <div>
-        <img class="center h-300 w-auto" :src="photoUrl" :alt="computedName" />
+    <div class="w-full m-4  text-xl text-black ">
+      <div class="h-64 w-full">
+        <img
+          class="center rounded-xl h-full w-auto mx-auto"
+          :src="photoUrl"
+          :alt="computedName"
+        />
       </div>
-      <div class="mb-20">
-        <p class="h-4 font-bold text-2xl rounded-xl">
+      <div class="m-8">
+        <p class="h-4 font-bold text-4xl rounded-xl">
           {{ computedName }}
         </p>
       </div>
-      <div v-for="each in area" :key="each">
-        <p class="mx-8 my-2 bg-black text-white font-light rounded-full">
-          &#9733; {{ each }}
-        </p>
+      <div class="h-32 w-full">
+        <div class="my-auto" v-for="each in area" :key="each">
+          <p class="mx-16 my-2 bg-black text-white  font-light rounded-full">
+            <span class="text-yellow-400"> &#9733; </span> {{ each }}
+          </p>
+        </div>
+      </div>
+      <div class="border border-white text-white m-4">
+        <div class="text-black text-sm">Description</div>
+        <p class=" text-3xl p-1">{{ description }}</p>
       </div>
       <div>
-        <p class="text-sm p-1">{{ description }}</p>
-      </div>
-      <div>
-        <base-button class="bg-green-200 rounded-xl" @click="contact(id)"
+        <base-button
+          class="rounded-xl bg-yellow-400 hover:text-yellow-400 hover:bg-black"
+          @click="contact(id)"
           >Contact me</base-button
         >
         <contact-coach
@@ -31,7 +40,12 @@
         >
         </contact-coach>
       </div>
-    </base-card>
+      <base-button
+        v-if="seeContactForm"
+        class="bg-gray-400 rounded-xl hover:bg-red-700 hover:text-white"
+        >Delete coach</base-button
+      >
+    </div>
   </li>
 </template>
 
@@ -56,7 +70,7 @@ export default {
   },
   methods: {
     contact(id) {
-      this.seeContactForm = true
+      this.seeContactForm = !this.seeContactForm
       const correctCoach = this.$store.getters.coaches.find(
         (coach) => coach.id === id
       )

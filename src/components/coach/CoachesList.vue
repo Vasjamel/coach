@@ -85,28 +85,18 @@
       </div>
 
       <base-card v-if="!toShow">
-        Loading...
+        <the-spinner></the-spinner>
       </base-card>
+
       <base-card v-else-if="toShow.length < 1">
         There are no coaches with these parameters. Please registed
         some!</base-card
       >
       <div v-else>
-        <div v-if="pages.length > 1" class="flex justify-center m-auto">
-          <div>Pages:</div>
-          <div class="m-4" v-for="page in pages" :key="page">
-            <base-button
-              class="bg-white rounded-xl m-auto"
-              @click="changePage(page)"
-            >
-              {{ page }}
-            </base-button>
-          </div>
-        </div>
-
-        <base-card class="flex content-center">
-          <ul class="flex content-center text-center">
+        <div class="flex flex-wrap justify-center content-center">
+          <ul class="flex text-center">
             <coach-card
+              class="justify-between items-stretch box-border"
               v-for="coach in paginate(filterCoachesByArea(toShow))"
               :key="coach.id"
               :id="coach.id"
@@ -117,7 +107,18 @@
               :area="coach.area"
             ></coach-card>
           </ul>
-        </base-card>
+        </div>
+
+        <div v-if="pages.length > 1" class="flex justify-center m-auto">
+          <div class="m-4" v-for="page in pages" :key="page">
+            <base-button
+              class="bg-white rounded-xl m-auto hover:bg-yellow-400"
+              @click.prevent="changePage(page)"
+            >
+              {{ page }}
+            </base-button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -137,7 +138,7 @@ export default {
       text: '',
       coachesArray: [],
       areasToFilter: ['frontend', 'backend', 'vue', 'other'],
-
+      loading: false,
       filtered: null,
       perPage: 3,
       pages: [],
@@ -160,9 +161,11 @@ export default {
 
   methods: {
     filterCoachesByArea(array) {
+      this.loading = true
       const filtersByArea = array.filter((coach) => {
         return coach.area.some((area) => this.areasToFilter.includes(area))
       })
+      this.loading = false
       return filtersByArea
     },
 
@@ -171,11 +174,14 @@ export default {
     },
 
     changePage(page) {
+      this.loading = true
       this.currentPage = page
       this.paginate(this.toShow)
+      this.loading = false
     },
 
     filterCoaches(value) {
+      this.loading = true
       const withoutDuplicates = this.$store.getters.coaches.filter(
         (coach) =>
           coach.name.toLowerCase().includes(value.toLowerCase()) ||
@@ -186,6 +192,7 @@ export default {
       this.calculatePages()
       this.paginate(this.filtered)
       this.currentPage = 1
+      this.loading = false
     },
 
     calculatePages() {
@@ -200,11 +207,13 @@ export default {
     },
 
     paginate(coaches) {
+      this.loading = true
       const page = this.currentPage
       let perPage = this.perPage
       let from = page * perPage - perPage
       let to = page * perPage
       this.calculatePages()
+      this.loading = false
       return coaches.slice(from, to)
     },
 
@@ -214,12 +223,16 @@ export default {
   },
 
   async created() {
+    this.loading = true
     await this.$store.dispatch('downloadCoaches')
+    this.loading = false
   },
 
   beforeUpdate() {
+    this.loading = true
     this.calculatePages()
     this.paginate(this.toShow)
+    this.loading = false
   },
 }
 </script>

@@ -1,15 +1,30 @@
 <template>
-  <base-card>
+  <base-card class="m-8 bg-black text-white">
     <form>
       <base-card>
-        <p>Please leave your message for coach {{ correctCoach.name }}</p>
-        <base-card>
-          <input type="text" v-model="message" />
+        <div>
+          Please leave your message for
+          <span class="text-2x1 text-yellow-400">
+            {{ correctCoach.name }}
+          </span>
+        </div>
+        <base-card class="block">
+          <input
+            type="text"
+            class="h-20 p-1  focus:bg-yellow-400  text-black focus:outline-none"
+            v-model="message"
+          />
         </base-card>
       </base-card>
       <div>
-        <base-button @click.prevent="hide">Cancel sending</base-button>
-        <base-button @click.prevent="send">Send message</base-button>
+        <base-button
+          class="rounded-xl  hover:text-yellow-400 hover:bg-black"
+          @click.prevent="send"
+          >Send message</base-button
+        >
+        <base-button class="hover:text-red-600" @click.prevent="hide"
+          >Cancel sending</base-button
+        >
       </div>
     </form>
   </base-card>
