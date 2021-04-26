@@ -1,36 +1,47 @@
 <template>
-  <base-card class="m-8 bg-black text-white">
-    <form>
-      <base-card>
-        <div>
-          Please leave your message for
-          <span class="text-2x1 text-yellow-400">
-            {{ correctCoach.name }}
-          </span>
-        </div>
-        <base-card class="block">
-          <input
-            type="text"
-            class="h-20 p-1  focus:bg-yellow-400  text-black focus:outline-none"
-            v-model="message"
-          />
-        </base-card>
-      </base-card>
+  <div class=" bg-gray-600 w-full text-white">
+    <form class="p-0">
       <div>
-        <base-button
-          class="rounded-xl  hover:text-yellow-400 hover:bg-black"
-          @click.prevent="send"
-          >Send message</base-button
-        >
-        <base-button class="hover:text-red-600" @click.prevent="hide"
-          >Cancel sending</base-button
-        >
+        <div class="text-xl text-center">
+          <div>
+            Please leave your message for
+          </div>
+          <div class="text-2xl text-yellow-400">{{ correctCoach.name }}:</div>
+        </div>
+        <div>
+          <textarea
+            class=" focus:bg-yellow-400 resize-none w-full p-2 h-20 text-black focus:outline-none"
+            v-model="message"
+            placeholder="Message here..."
+          />
+        </div>
       </div>
+      <div>
+        <button
+          class="w-auto h-auto m-4 rounded p-1 bg-gray-400 text-black hover:text-red-400 hover:bg-red-600"
+          @click.prevent="hide"
+        >
+          Cancel sending
+        </button>
+        <button
+          class="w-auto h-auto m-4 rounded p-1 bg-gray-400 text-black hover:text-yellow-400 hover:bg-black"
+          @click.prevent="send"
+        >
+          Send message
+        </button>
+      </div>
+      <button
+        class=" p-1 bg-gray-400 rounded hover:bg-red-700 hover:text-white"
+        @click.prevent="deleteCoach"
+      >
+        Delete coach
+      </button>
     </form>
-  </base-card>
+  </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   props: ['correctCoach'],
   data() {
@@ -48,6 +59,10 @@ export default {
     send() {
       this.$emit('send-form', this.message)
       this.message = ''
+    },
+    async deleteCoach() {
+      await axios.delete('/coaches/' + this.$props.correctCoach.id + '.json')
+      this.$store.dispatch('downloadCoaches')
     },
   },
   created() {

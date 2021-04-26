@@ -95,8 +95,8 @@
       <div v-else>
         <div class="flex flex-wrap justify-center content-center">
           <ul class="flex text-center">
-            <coach-card
-              class="justify-between items-stretch box-border"
+            <coaches-card
+              class="justify-between items-stretch box-border min-h-full min-w-max max-w-full"
               v-for="coach in paginate(filterCoachesByArea(toShow))"
               :key="coach.id"
               :id="coach.id"
@@ -105,7 +105,7 @@
               :photoUrl="coach.photoUrl"
               :description="coach.description"
               :area="coach.area"
-            ></coach-card>
+            ></coaches-card>
           </ul>
         </div>
 
@@ -125,12 +125,10 @@
 </template>
 
 <script>
-import CoachCard from './CoachCard'
-// import FilterForm from './FilterForm'
+import CoachesCard from './CoachesCard'
 export default {
   components: {
-    CoachCard,
-    // FilterForm,
+    CoachesCard,
   },
 
   data() {

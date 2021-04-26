@@ -36,13 +36,13 @@
 
       <div class="m-8">
         <div>
-          <label for="password">Confirm password:</label>
+          <label for="cofirmPassword">Confirm password:</label>
         </div>
         <div>
           <input
             type="password"
-            id="password"
-            v-model="user.cofirmPassword"
+            id="cofirmPassword"
+            v-model="cofirmPassword"
             class="bg-black rounded-xl focus:outline-none focus:text-black focus:bg-yellow-400  text-white w-1/4"
           />
         </div>
@@ -80,7 +80,6 @@ export default {
         email: '',
         password: '',
       },
-
       cofirmPassword: '',
       formIsValid: true,
     }
@@ -88,7 +87,6 @@ export default {
 
   methods: {
     check() {
-      this.isValid = true
       if (
         this.user.email === '' ||
         !this.user.email.includes('@') ||
@@ -96,6 +94,8 @@ export default {
         this.cofirmPassword !== this.user.password
       ) {
         this.formIsValid = false
+      } else {
+        this.formIsValid = true
       }
     },
 

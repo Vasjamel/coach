@@ -5,7 +5,10 @@
         <login-button class="bg-white text-black font-bold rounded-xl m-2">
         </login-button>
 
-        <signup-button class="bg-white text-black font-bold rounded-xl">
+        <signup-button
+          v-if="!$store.getters.loggedIn"
+          class="bg-white text-black font-bold rounded-xl"
+        >
         </signup-button>
       </div>
       <div class="text-7xl mx-10 font-bold">
