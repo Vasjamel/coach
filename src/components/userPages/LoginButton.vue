@@ -11,7 +11,12 @@
 export default {
   methods: {
     openLogin() {
-      this.$router.push('/login')
+      if (this.$store.getters.loggedIn) {
+        this.$store.dispatch('logOut')
+        this.$router.push('/home')
+      } else {
+        this.$router.push('/login')
+      }
     },
   },
   computed: {

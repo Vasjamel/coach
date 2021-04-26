@@ -1,5 +1,5 @@
 <template>
-  <div class="m-8 text-2xl font-mono ">
+  <div v-if="!isLoading" class="m-8 text-2xl font-mono ">
     <form class=" m-8 p-2 text-center bg-white rounded-xl">
       <div class="text-3xl font-extrabold p-4">
         CREATE AN ACCOUNT
@@ -70,6 +70,7 @@
       </div>
     </form>
   </div>
+  <the-spinner v-else></the-spinner>
 </template>
 
 <script>
@@ -80,13 +81,17 @@ export default {
         email: '',
         password: '',
       },
+
       cofirmPassword: '',
       formIsValid: true,
+      isLoading: false,
+      error: null,
     }
   },
 
   methods: {
     check() {
+      this.isValid = true
       if (
         this.user.email === '' ||
         !this.user.email.includes('@') ||
@@ -94,16 +99,23 @@ export default {
         this.cofirmPassword !== this.user.password
       ) {
         this.formIsValid = false
-      } else {
-        this.formIsValid = true
       }
     },
 
-    create() {
+    async create() {
+      this.isLoading = true
       this.check()
-      if (this.isValid) {
-        this.$store.dispatch('signUp', this.user)
-        this.$router.push('/coaches')
+      try {
+        if (this.isValid) {
+          await this.$store.dispatch('signUp', this.user)
+          this.$router.push('/home')
+          this.isLoading = false
+        } else {
+          this.isLoading = false
+        }
+      } catch (err) {
+        console.log(err.message)
+        this.isLoading = false
       }
     },
 

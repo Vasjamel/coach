@@ -71,7 +71,10 @@ export default {
     log() {
       this.check()
       if (this.isValid) {
-        this.$store.dispatch('logIn')
+        this.$store.dispatch('logIn', {
+          email: this.email,
+          password: this.password,
+        })
         this.$router.push('/coaches')
       }
     },

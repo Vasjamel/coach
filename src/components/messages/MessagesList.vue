@@ -1,7 +1,12 @@
 <template>
-  <base-card>
-    <div>
-      <h1>Messages:</h1>
+  <div class="bg-gray-200">
+    <div class="p-8">
+      <base-button
+        @click="goToCoaches"
+        class="mx-20 bg-gray-400 text-white hover:bg-black rounded-xl"
+        >Back to coaches</base-button
+      >
+      <div class="text-4xl text-center">Messages:</div>
       <message-card
         class="m-12"
         v-for="message in arrayOfMessages"
@@ -11,7 +16,7 @@
         :coach="message.coach"
       ></message-card>
     </div>
-  </base-card>
+  </div>
 </template>
 
 <script>
@@ -26,6 +31,13 @@ export default {
       return this.$store.getters.getMessages
     },
   },
+
+  methods: {
+    goToCoaches() {
+      this.$router.push('/coaches')
+    },
+  },
+
   created() {
     this.$store.dispatch('downloadMessages')
   },

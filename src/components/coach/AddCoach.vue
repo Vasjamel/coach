@@ -1,129 +1,148 @@
 <template>
-  <div class="flex content-center">
-    <base-card
-      class="border w-full min-w-2x1 max-w-2xl center border-solid rounded-xl "
-    >
-      <base-card
-        ><h1 class="text-4xl	m-2.5">REGISTER A NEW COACH!</h1></base-card
-      >
-      <base-card class="pt-10">
-        <label for="coach-name">Input a coach name:</label>
-        <div>
-          <input
-            class=" m-7 px-2 text-white border-red-600 bg-red-600 rounded"
-            type="text"
-            id="coach-name"
-            name="coach-name"
-            v-model.trim="newCoach.name"
-          />
-        </div>
-      </base-card>
-
-      <div>
-        <label for="coach-email">Input a coach email:</label>
-        <div>
-          <input
-            class=" m-7 px-2 text-white border-red-600 bg-red-600 rounded"
-            type="email"
-            id="coach-email"
-            name="coach-email"
-            v-model.trim="newCoach.email"
-          />
-        </div>
+  <div class="flex font-mono">
+    <div class="mx-auto my-8 text-center">
+      <div class="m-0 bg-white">
+        <h1 class="text-3xl">REGISTER A NEW COACH!</h1>
       </div>
-
-      <div>
-        <label for="coach-description">Input a short description:</label>
-        <div>
-          <input
-            class=" m-7 px-2 text-white border-red-600 bg-red-600 rounded"
-            type="text"
-            id="coach-description"
-            name="coach-description"
-            v-model.trim="newCoach.description"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label for="coach-url">URL to a coach photo:</label>
-        <div>
-          <input
-            class=" m-7 px-2 text-white border-red-600 bg-red-600 rounded"
-            type="url"
-            id="coach-url"
-            name="coach-url"
-            v-model.trim="newCoach.photoUrl"
-          />
-        </div>
-      </div>
-
-      <div>
-        This coach will coach us on:
-        <div class="flexbox">
-          <div class="m-4">
-            <label for="coach-area">
-              Frontend
-            </label>
+      <div class="m-0 text-white bg-gray-600 rounded-xl p-4">
+        <div class="">
+          <label for="coach-name">Input a coach name:</label>
+          <div>
             <input
-              type="checkbox"
-              id="frontend"
-              value="frontend"
-              v-model="newCoach.area"
-            />
-          </div>
-          <div class="m-4">
-            <label for="coach-area">
-              Backend
-            </label>
-            <input
-              type="checkbox"
-              id="backend"
-              value="backend"
-              v-model="newCoach.area"
-            />
-          </div>
-          <div class="m-4">
-            <label for="coach-area">
-              Vue
-            </label>
-            <input
-              type="checkbox"
-              id="vue"
-              value="vue"
-              v-model="newCoach.area"
-            />
-          </div>
-          <div class="m-4">
-            <label for="coach-area">
-              Other
-            </label>
-            <input
-              type="checkbox"
-              id="other"
-              value="other"
-              v-model="newCoach.area"
+              class="mx-2 px-2 focus:bg-yellow-400 focus:outline-none rounded-xl text-black"
+              type="text"
+              id="coach-name"
+              name="coach-name"
+              v-model.trim="newCoach.name"
             />
           </div>
         </div>
-      </div>
-      <div v-if="!isValid">
-        <p>Please insert the correct data!</p>
-        <p>Note that all the fields are mandatory!</p>
-        <p>(At least 1 checkbox should be ticked)</p>
+
+        <div>
+          <label for="coach-email">Input a coach email:</label>
+          <div>
+            <input
+              class="mx-2 px-2 text-black focus:bg-yellow-400 focus:outline-none rounded-xl"
+              type="email"
+              id="coach-email"
+              name="coach-email"
+              v-model.trim="newCoach.email"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="coach-description">Input a short description:</label>
+          <div>
+            <input
+              class="mx-2 px-2 text-black focus:bg-yellow-400 focus:outline-none rounded-xl"
+              type="text"
+              id="coach-description"
+              name="coach-description"
+              v-model.trim="newCoach.description"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="coach-url">URL to a coach photo:</label>
+          <div>
+            <input
+              class="mx-2 px-2 text-black focus:bg-yellow-400 focus:outline-none rounded-xl"
+              type="url"
+              id="coach-url"
+              name="coach-url"
+              v-model.trim="newCoach.photoUrl"
+            />
+          </div>
+        </div>
+
+        <div>
+          This coach will coach us on:
+          <div class="flexbox">
+            <div class="">
+              <label for="coach-area">
+                Frontend
+              </label>
+              <input
+                type="checkbox"
+                id="frontend"
+                value="frontend"
+                v-model="newCoach.area"
+              />
+            </div>
+            <div class="">
+              <label for="coach-area">
+                Backend
+              </label>
+              <input
+                type="checkbox"
+                id="backend"
+                value="backend"
+                v-model="newCoach.area"
+              />
+            </div>
+            <div class="">
+              <label for="coach-area">
+                Vue
+              </label>
+              <input
+                type="checkbox"
+                id="vue"
+                value="vue"
+                v-model="newCoach.area"
+              />
+            </div>
+            <div class="">
+              <label for="coach-area">
+                Other
+              </label>
+              <input
+                type="checkbox"
+                id="other"
+                value="other"
+                v-model="newCoach.area"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div v-if="!isValid" class="text-red-400">
+          <p>Please insert the correct data!</p>
+          <p>Note that all the fields are mandatory!</p>
+          <p>(At least 1 checkbox should be ticked)</p>
+        </div>
       </div>
       <base-button
-        class="m-2 bg-red-600 text-white rounded"
-        @click.prevent="submitForm"
-        >Submit</base-button
+        class="m-4 bg-gray-600 rounded-xl text-white hover:text-black hover:bg-yellow-400"
+        @click.prevent="cancelSending"
+        >Cancel</base-button
       >
-    </base-card>
+    </div>
+    <div class=" flex-col m-auto text-center w-72">
+      <div class="text-3xl">Coach preview:</div>
+
+      <coaches-card
+        :name="newCoach.name"
+        :email="newCoach.email"
+        :photoUrl="newCoach.photoUrl"
+        :description="newCoach.description"
+        :area="newCoach.area"
+      ></coaches-card>
+      <base-button
+        class="bg-gray-600 rounded-xl text-white hover:text-black hover:bg-yellow-400"
+        @click.prevent="submitForm"
+        >Submit this form</base-button
+      >
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import CoachesCard from './CoachesCard'
 export default {
+  components: { CoachesCard },
   data() {
     return {
       isValid: true,
@@ -165,6 +184,10 @@ export default {
           }
         })
         .catch((err) => console.log(err))
+    },
+
+    cancelSending() {
+      this.$router.push('/coaches')
     },
 
     submitForm() {

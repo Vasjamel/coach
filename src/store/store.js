@@ -3,7 +3,7 @@ import axios from 'axios'
 const store = {
   state() {
     return {
-      loggedIn: true,
+      loggedIn: false,
       coaches: null,
       messages: null,
     }
@@ -19,11 +19,14 @@ const store = {
     getMessages(state) {
       return state.messages
     },
+    token(state) {
+      return state.token
+    },
   },
 
   mutations: {
     logIn(state) {
-      state.loggedIn = !state.loggedIn
+      state.loggedIn = true
     },
 
     logOut(state) {
@@ -40,7 +43,7 @@ const store = {
       state.coaches = payload
     },
     loadMessages(state, payload) {
-      state.messages = [...payload]
+      state.messages = payload
     },
   },
 
@@ -58,7 +61,7 @@ const store = {
         }
       )
       const responseData = await response.json()
-      console.log(responseData)
+
       if (!response.ok) {
         const error = new Error(
           responseData.message || 'failed to authenticate'
@@ -72,8 +75,31 @@ const store = {
       })
     },
 
-    logIn(context) {
-      context.commit('logIn')
+    async logIn(context, payload) {
+      const response = await fetch(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDPbLFOBHKzYhiK0NAuVN6ZltT2RCApStk',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            email: payload.email,
+            password: payload.password,
+            returnSecureToken: true,
+          }),
+        }
+      )
+      const responseData = await response.json()
+
+      if (!response.ok) {
+        const error = new Error(
+          responseData.message || 'failed to authenticate'
+        )
+        throw error
+      }
+      context.commit('logIn', {
+        token: responseData.idToken,
+        userId: responseData.localId,
+        tokenExpiration: responseData.expiresIn,
+      })
     },
 
     logOut(context) {

@@ -1,50 +1,49 @@
 <template>
-  <li>
-    <div>
-      <div class="m-6 p-0 flex bg-gray-600 text-white text-center rounded-xl">
-        <div>
-          <div class="m-4 text-2xl font-bold">
-            {{ computedName }}
-          </div>
-
-          <div>
-            <img
-              class="m-0 h-48 w-auto rounded-none"
-              :src="photoUrl"
-              :alt="photoAlt"
-            />
-          </div>
-          <div class="p-4 text-center space-y-4">
-            <div class=" font-bold">
-              <div class="text-xl mb-4">
-                Areas:
-              </div>
-
-              <div class="text-yellow-400" v-for="each in area" :key="each">
-                <span> &#9733; </span> {{ each }}
-              </div>
-            </div>
-            <div class="text-lg text-black font-semibold">
-              {{ description }}
-            </div>
-          </div>
-          <button
-            class="w-auto h-auto m-4 rounded p-1 bg-gray-400 text-black hover:text-yellow-400 hover:bg-black"
-            @click="contact(id)"
-          >
-            See more
-          </button>
-          <contact-coach
-            v-if="seeContactForm"
-            :correctCoach="thisCoach"
-            @hide-form="hide"
-            @send-form="send"
-          >
-          </contact-coach>
+  <div>
+    <div class="m-6 p-0 flex bg-gray-600 text-white text-center rounded-xl">
+      <div>
+        <div class="m-4 text-2xl font-bold">
+          {{ computedName }}
         </div>
+
+        <div>
+          <img
+            class="m-0 h-48 w-auto rounded-none"
+            :src="photoUrl"
+            :alt="photoAlt"
+          />
+        </div>
+        <div class="p-4 text-center space-y-4">
+          <div class=" font-bold">
+            <div class="text-xl mb-4">
+              Areas:
+            </div>
+
+            <div class="text-yellow-400" v-for="each in area" :key="each">
+              <span> &#9733; </span> {{ each }}
+            </div>
+          </div>
+          <div class="text-lg text-black font-semibold">
+            {{ description }}
+          </div>
+        </div>
+        <button
+          v-if="!$router.path === '/addcoach'"
+          class="w-auto h-auto m-4 rounded p-1 bg-gray-400 text-black hover:text-yellow-400 hover:bg-black"
+          @click="contact(id)"
+        >
+          See more
+        </button>
+        <contact-coach
+          v-if="seeContactForm"
+          :correctCoach="thisCoach"
+          @hide-form="hide"
+          @send-form="send"
+        >
+        </contact-coach>
       </div>
     </div>
-  </li>
+  </div>
 </template>
 
 <script>
