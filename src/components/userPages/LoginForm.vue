@@ -1,5 +1,7 @@
 <template>
-  <div class="m-8 text-2xl font-mono ">
+  <the-spinner v-if="isLoading"></the-spinner>
+
+  <div v-else class="m-8 text-2xl font-mono ">
     <form class=" m-8 p-2 text-center bg-white rounded-xl">
       <div class="text-3xl font-extrabold p-4">
         LOG IN BELOW
@@ -52,7 +54,8 @@ export default {
     return {
       email: '',
       password: '',
-      isValid: true,
+      isValid: null,
+      isLoading: false,
     }
   },
 
@@ -68,14 +71,21 @@ export default {
       }
     },
 
-    log() {
+    async log() {
+      this.isLoading = true
       this.check()
+
       if (this.isValid) {
-        this.$store.dispatch('logIn', {
+        await this.$store.dispatch('logIn', {
           email: this.email,
           password: this.password,
         })
+        this.isLoading = false
         this.$router.push('/coaches')
+      } else {
+        this.email = ''
+        this.password = ''
+        this.isLoading = false
       }
     },
   },

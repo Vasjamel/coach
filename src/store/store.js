@@ -6,6 +6,9 @@ const store = {
       loggedIn: false,
       coaches: null,
       messages: null,
+      token: null,
+      userId: null,
+      tokenExpiration: null,
     }
   },
 
@@ -18,9 +21,6 @@ const store = {
     },
     getMessages(state) {
       return state.messages
-    },
-    token(state) {
-      return state.token
     },
   },
 
@@ -66,7 +66,7 @@ const store = {
         const error = new Error(
           responseData.message || 'failed to authenticate'
         )
-        throw error
+        alert(error)
       }
       context.commit('setUser', {
         token: responseData.idToken,
@@ -93,13 +93,14 @@ const store = {
         const error = new Error(
           responseData.message || 'failed to authenticate'
         )
-        throw error
+        alert(error)
+      } else {
+        context.commit('logIn', {
+          token: responseData.idToken,
+          userId: responseData.localId,
+          tokenExpiration: responseData.expiresIn,
+        })
       }
-      context.commit('logIn', {
-        token: responseData.idToken,
-        userId: responseData.localId,
-        tokenExpiration: responseData.expiresIn,
-      })
     },
 
     logOut(context) {

@@ -13,10 +13,19 @@ const router = createRouter({
     { path: '/coaches', component: CoachesList },
     { path: '/home', component: HomePage },
     { path: '/addcoach', component: AddCoach },
-    { path: '/login', component: LoginForm },
-    { path: '/signup', component: SignupForm },
-    { path: '/messages', component: MessagesList },
-    
+    {
+      path: '/login',
+      component: LoginForm,
+    },
+    {
+      path: '/signup',
+      component: SignupForm,
+    },
+    {
+      path: '/messages',
+      component: MessagesList,
+    },
+
     { path: '/:inactive(.*)', component: HomePage },
   ],
 })

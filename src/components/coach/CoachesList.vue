@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div v-if="$store.getters.loggedIn">
     <hr />
-    <div v-if="this.$store.getters.loggedIn">
+    <div>
       <div class="flex bg-black text-white text-xl content-center">
         <base-button
           @click="goToAddCoach"
@@ -98,7 +98,7 @@
           <ul class="flex text-center">
             <coaches-card
               class="justify-between items-stretch box-border min-h-full min-w-max max-w-full"
-              v-for="coach in paginate(filteredCoachesByArea)"
+              v-for="coach in paginate(filterCoachesByArea(toShow))"
               :key="coach.id"
               :id="coach.id"
               :name="coach.name"
@@ -150,9 +150,6 @@ export default {
     },
     toShow() {
       return this.filtered ? this.filtered : this.$store.getters.coaches
-    },
-    filteredCoachesByArea() {
-      return this.filterCoachesByArea(this.toShow)
     },
   },
   watch: {
@@ -224,14 +221,15 @@ export default {
     },
   },
 
-  async created() {
+  created() {
     this.loading = true
-    await this.$store.dispatch('downloadCoaches')
+    this.$store.dispatch('downloadCoaches')
     this.loading = false
   },
 
-  beforeUpdate() {
+  async beforeUpdate() {
     this.loading = true
+    await this.$store.dispatch('downloadCoaches')
     this.calculatePages()
     this.paginate(this.toShow)
     this.loading = false

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex font-mono">
+  <div v-if="$store.getters.loggedIn" class="flex font-mono">
     <div class="mx-auto my-8 text-center">
       <div class="m-0 bg-white">
         <h1 class="text-3xl">REGISTER A NEW COACH!</h1>

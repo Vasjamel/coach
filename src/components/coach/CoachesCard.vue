@@ -28,7 +28,6 @@
           </div>
         </div>
         <button
-          v-if="!$router.path === '/addcoach'"
           class="w-auto h-auto m-4 rounded p-1 bg-gray-400 text-black hover:text-yellow-400 hover:bg-black"
           @click="contact(id)"
         >
