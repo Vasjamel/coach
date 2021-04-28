@@ -14,5 +14,8 @@ export default {
   components: {
     BaseHeader,
   },
+  created() {
+    console.log(this.$store.getters.loggedIn)
+  },
 }
 </script>

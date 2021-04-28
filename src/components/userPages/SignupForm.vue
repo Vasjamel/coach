@@ -91,30 +91,36 @@ export default {
 
   methods: {
     check() {
-      this.isValid = true
+      this.formIsValid = true
       if (
         this.user.email === '' ||
         !this.user.email.includes('@') ||
-        this.user.password.length < 6 ||
-        this.cofirmPassword !== this.user.password
+        this.user.password.length < 6
       ) {
         this.formIsValid = false
+      } else {
+        this.isValid = true
+        if (this.cofirmPassword !== this.user.password) {
+          alert('PASSWORD IS NOT MATCHING WITH CONFIRMED PASSWORD!!!')
+          this.formIsValid = false
+        }
       }
     },
 
     async create() {
       this.isLoading = true
-      this.check()
+      await this.check()
       try {
-        if (this.isValid) {
+        if (this.formIsValid) {
           await this.$store.dispatch('signUp', this.user)
-          this.$router.push('/home')
-          this.isLoading = false
+          this.$router.push('/login')
         } else {
-          this.isLoading = false
+          alert('Something went wrong. Please retry!')
+          this.$router.push('/home')
         }
+        this.isLoading = false
       } catch (err) {
-        console.log(err.message)
+        alert(err.message)
         this.isLoading = false
       }
     },

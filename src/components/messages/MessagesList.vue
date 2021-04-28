@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$store.getters.loggedIn" class="bg-gray-200">
+  <div class="bg-gray-200">
     <div class="p-8">
       <base-button
         @click="goToCoaches"

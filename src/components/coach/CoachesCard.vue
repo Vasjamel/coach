@@ -8,7 +8,7 @@
 
         <div>
           <img
-            class="m-0 h-48 w-auto rounded-none"
+            class=" block mx-auto m-0 h-48  w-auto rounded-none"
             :src="photoUrl"
             :alt="photoAlt"
           />
@@ -84,7 +84,10 @@ export default {
         message: message,
       }
       axios
-        .post('/messages.json', createMessage)
+        .post(
+          `/messages.json?auth=${this.$store.getters.gettoken}`,
+          createMessage
+        )
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
     },

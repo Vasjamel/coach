@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$store.getters.loggedIn" class="flex font-mono">
+  <div class="flex font-mono">
     <div class="mx-auto my-8 text-center">
       <div class="m-0 bg-white">
         <h1 class="text-3xl">REGISTER A NEW COACH!</h1>
@@ -121,19 +121,19 @@
     </div>
     <div class=" flex-col m-auto text-center w-72">
       <div class="text-3xl">Coach preview:</div>
-
       <coaches-card
         :name="newCoach.name"
         :email="newCoach.email"
         :photoUrl="newCoach.photoUrl"
         :description="newCoach.description"
         :area="newCoach.area"
-      ></coaches-card>
+      >
+      </coaches-card>
       <base-button
         class="bg-gray-600 rounded-xl text-white hover:text-black hover:bg-yellow-400"
         @click.prevent="submitForm"
-        >Submit this form</base-button
-      >
+        >Submit this form
+      </base-button>
     </div>
   </div>
 </template>
@@ -172,7 +172,10 @@ export default {
 
     registerForm() {
       axios
-        .post('/coaches.json', this.newCoach)
+        .post(
+          `/coaches.json?auth=${this.$store.getters.gettoken}`,
+          this.newCoach
+        )
         .then((res) => {
           console.log(res)
           this.newCoach = {
@@ -183,7 +186,7 @@ export default {
             area: [],
           }
         })
-        .catch((err) => console.log(err))
+        .catch((err) => alert(err))
     },
 
     cancelSending() {
@@ -197,13 +200,7 @@ export default {
         this.$router.push('/coaches')
         this.$store.dispatch('downloadCoaches')
       } else {
-        this.newCoach = {
-          name: '',
-          email: '',
-          photoUrl: '',
-          description: '',
-          area: [],
-        }
+        alert('Please input a correct data!')
       }
     },
   },

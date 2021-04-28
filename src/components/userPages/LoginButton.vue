@@ -13,7 +13,7 @@ export default {
     openLogin() {
       if (this.$store.getters.loggedIn) {
         this.$store.dispatch('logOut')
-        this.$router.push('/coaches')
+        this.$router.push('/home')
       } else {
         this.$router.push('/login')
       }

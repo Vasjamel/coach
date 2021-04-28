@@ -11,11 +11,13 @@
         >
         </signup-button>
       </div>
+
       <div class="text-7xl mx-10 font-bold">
         <div class="p-2">
           COACH DISCOVERY
         </div>
       </div>
+
       <div class=" my-5 text-center text-lg">
         Find the relevant coach!
       </div>

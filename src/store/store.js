@@ -22,14 +22,23 @@ const store = {
     getMessages(state) {
       return state.messages
     },
+    gettoken(state) {
+      return state.token
+    },
   },
 
   mutations: {
-    logIn(state) {
+    logIn(state, payload) {
+      state.token = payload.token
+      state.userId = payload.userId
+      state.tokenExpiration = payload.tokenExpiration
       state.loggedIn = true
     },
 
     logOut(state) {
+      state.token = null
+      state.userId = null
+      state.tokenExpiration = null
       state.loggedIn = false
     },
 
@@ -64,7 +73,7 @@ const store = {
 
       if (!response.ok) {
         const error = new Error(
-          responseData.message || 'failed to authenticate'
+          responseData.message || 'Failed to authenticate'
         )
         alert(error)
       }
@@ -116,7 +125,9 @@ const store = {
     },
 
     async downloadCoaches(context) {
-      const response = await axios.get('/coaches.json')
+      const response = await axios.get(
+        '/coaches.json?auth=' + context.getters.gettoken
+      )
       const receivedArray = []
       for (let each in response.data) {
         const everyCoach = {
@@ -132,20 +143,22 @@ const store = {
       context.commit('loadCoaches', receivedArray)
     },
     downloadMessages(context) {
-      axios.get('messages.json').then((response) => {
-        console.log(response)
-        const receivedArray = []
-        for (let each in response.data) {
-          const eachMessage = {
-            messageId: each,
-            coach: response.data[each].coach,
-            message: response.data[each].message,
+      axios
+        .get('messages.json?auth=' + context.getters.gettoken)
+        .then((response) => {
+          console.log(response)
+          const receivedArray = []
+          for (let each in response.data) {
+            const eachMessage = {
+              messageId: each,
+              coach: response.data[each].coach,
+              message: response.data[each].message,
+            }
+            receivedArray.push(eachMessage)
           }
-          receivedArray.push(eachMessage)
-        }
-        console.log(receivedArray)
-        context.commit('loadMessages', receivedArray)
-      })
+          console.log(receivedArray)
+          context.commit('loadMessages', receivedArray)
+        })
     },
   },
 }

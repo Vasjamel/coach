@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$store.getters.loggedIn">
+  <div>
     <hr />
     <div>
       <div class="flex bg-black text-white text-xl content-center">
@@ -227,9 +227,8 @@ export default {
     this.loading = false
   },
 
-  async beforeUpdate() {
+  beforeUpdate() {
     this.loading = true
-    await this.$store.dispatch('downloadCoaches')
     this.calculatePages()
     this.paginate(this.toShow)
     this.loading = false

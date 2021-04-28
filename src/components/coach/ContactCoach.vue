@@ -4,9 +4,14 @@
       <div>
         <div class="text-xl text-center">
           <div>
-            Please leave your message for
+            Please leave your message
           </div>
-          <div class="text-2xl text-yellow-400">{{ correctCoach.name }}:</div>
+          <div>
+            for
+            <span class="text-2xl text-yellow-400">
+              {{ correctCoach.name }}:
+            </span>
+          </div>
         </div>
         <div>
           <textarea
