@@ -222,9 +222,13 @@ export default {
   },
 
   created() {
-    this.loading = true
-    this.$store.dispatch('downloadCoaches')
-    this.loading = false
+    if (!this.$store.getters.loggedIn) {
+      this.$router.push('/home')
+    } else {
+      this.loading = true
+      this.$store.dispatch('downloadCoaches')
+      this.loading = false
+    }
   },
 
   beforeUpdate() {

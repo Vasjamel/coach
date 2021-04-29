@@ -14,6 +14,7 @@
         :id="message.messageId"
         :message="message.message"
         :coach="message.coach"
+        :time="message.time"
       ></message-card>
     </div>
   </div>
@@ -39,7 +40,11 @@ export default {
   },
 
   created() {
-    this.$store.dispatch('downloadMessages')
+    if (!this.$store.getters.loggedIn) {
+      this.$router.push('/home')
+    } else {
+      this.$store.dispatch('downloadMessages')
+    }
   },
 }
 </script>

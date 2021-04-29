@@ -104,6 +104,9 @@ const store = {
         )
         alert(error)
       } else {
+        localStorage.setItem('token', responseData.idToken)
+        localStorage.setItem('userId', responseData.localId)
+
         context.commit('logIn', {
           token: responseData.idToken,
           userId: responseData.localId,
@@ -112,7 +115,22 @@ const store = {
       }
     },
 
+    tryLogin(context) {
+      const token = localStorage.getItem('token')
+      const userId = localStorage.getItem('userId')
+
+      if (token && userId) {
+        context.commit('logIn', {
+          token: token,
+          userId: userId,
+          tokenExpiration: null,
+        })
+      }
+    },
+
     logOut(context) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
       context.commit('logOut')
     },
 
@@ -146,7 +164,6 @@ const store = {
       axios
         .get('messages.json?auth=' + context.getters.gettoken)
         .then((response) => {
-          console.log(response)
           const receivedArray = []
           for (let each in response.data) {
             const eachMessage = {
@@ -156,7 +173,6 @@ const store = {
             }
             receivedArray.push(eachMessage)
           }
-          console.log(receivedArray)
           context.commit('loadMessages', receivedArray)
         })
     },

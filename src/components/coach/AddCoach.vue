@@ -59,8 +59,8 @@
 
         <div>
           This coach will coach us on:
-          <div class="flexbox">
-            <div class="">
+          <div>
+            <div>
               <label for="coach-area">
                 Frontend
               </label>
@@ -120,7 +120,7 @@
       >
     </div>
     <div class=" flex-col m-auto text-center w-72">
-      <div class="text-3xl">Coach preview:</div>
+      <div class="mt-0 text-3xl">Coach preview:</div>
       <coaches-card
         :name="newCoach.name"
         :email="newCoach.email"
@@ -176,8 +176,7 @@ export default {
           `/coaches.json?auth=${this.$store.getters.gettoken}`,
           this.newCoach
         )
-        .then((res) => {
-          console.log(res)
+        .then(() => {
           this.newCoach = {
             name: '',
             email: '',
@@ -203,6 +202,11 @@ export default {
         alert('Please input a correct data!')
       }
     },
+  },
+  created() {
+    if (!this.$store.getters.loggedIn) {
+      this.$router.push('/home')
+    }
   },
 }
 </script>

@@ -1,5 +1,8 @@
 <template>
   <div class=" bg-gray-600 w-full text-white">
+    <div class="mb-4 text-lg text-black font-semibold">
+      {{ description }}
+    </div>
     <form class="p-0">
       <div>
         <div class="text-xl text-center">
@@ -48,7 +51,7 @@
 <script>
 import axios from 'axios'
 export default {
-  props: ['correctCoach'],
+  props: ['correctCoach', 'description'],
   data() {
     return {
       coach: null,
@@ -66,7 +69,9 @@ export default {
       this.message = ''
     },
     async deleteCoach() {
-      await axios.delete('/coaches/' + this.$props.correctCoach.id + '.json')
+      await axios.delete(
+        `/coaches/${this.$props.correctCoach.id}.json?auth=${this.$store.getters.gettoken}`
+      )
       this.$store.dispatch('downloadCoaches')
     },
   },

@@ -89,5 +89,10 @@ export default {
       }
     },
   },
+  created() {
+    if (this.$store.getters.loggedIn) {
+      this.$router.push('/coaches')
+    }
+  },
 }
 </script>

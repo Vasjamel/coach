@@ -23,19 +23,18 @@
               <span> &#9733; </span> {{ each }}
             </div>
           </div>
-          <div class="text-lg text-black font-semibold">
-            {{ description }}
-          </div>
         </div>
         <button
+          v-if="showButton"
           class="w-auto h-auto m-4 rounded p-1 bg-gray-400 text-black hover:text-yellow-400 hover:bg-black"
           @click="contact(id)"
         >
-          See more
+          {{ showHide }}
         </button>
         <contact-coach
           v-if="seeContactForm"
           :correctCoach="thisCoach"
+          :description="description"
           @hide-form="hide"
           @send-form="send"
         >
@@ -66,6 +65,13 @@ export default {
     photoAlt() {
       return this.name + ' image shoud be here'
     },
+
+    showButton() {
+      return this.$route.fullPath === '/addcoach' ? false : true
+    },
+    showHide() {
+      return this.seeContactForm ? 'Hide info' : 'See more'
+    },
   },
   methods: {
     contact(id) {
@@ -88,7 +94,6 @@ export default {
           `/messages.json?auth=${this.$store.getters.gettoken}`,
           createMessage
         )
-        .then((res) => console.log(res))
         .catch((err) => console.log(err))
     },
   },
