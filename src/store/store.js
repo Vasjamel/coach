@@ -103,10 +103,10 @@ const store = {
           responseData.message || 'failed to authenticate'
         )
         alert(error)
+        context.commit('logOut')
       } else {
         localStorage.setItem('token', responseData.idToken)
         localStorage.setItem('userId', responseData.localId)
-
         context.commit('logIn', {
           token: responseData.idToken,
           userId: responseData.localId,

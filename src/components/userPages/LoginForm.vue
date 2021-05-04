@@ -72,12 +72,12 @@ export default {
       }
     },
 
-    async log() {
+    log() {
       this.isLoading = true
       this.check()
 
       if (this.isValid) {
-        await this.$store.dispatch('logIn', {
+        this.$store.dispatch('logIn', {
           email: this.email,
           password: this.password,
         })

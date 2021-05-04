@@ -1,6 +1,6 @@
 <template>
   <div v-if="!isLoading" class="m-8 text-2xl font-mono ">
-    <vee-form @submit="create" class=" m-8 p-2 text-center bg-white rounded-xl">
+    <form class=" m-8 p-2 text-center bg-white rounded-xl">
       <div class="text-3xl font-extrabold p-4">
         CREATE AN ACCOUNT
       </div>
@@ -9,31 +9,28 @@
           <label for="username">Email:</label>
         </div>
         <div>
-          <vee-field
-            name="email"
-            rules="required|email"
+          <input
             type="text"
             id="username"
             v-model="user.email"
             class="bg-black rounded-xl focus:outline-none focus:text-black  focus:bg-yellow-400 text-white w-1/4"
           />
-          <vee-error name="email" as="div"></vee-error>
         </div>
       </div>
       <div class="m-8">
         <div>
-          <label for="password">Password: </label>
+          <label for="password"
+            >Password:
+            <div class=" text-sm">(6 characters min)</div></label
+          >
         </div>
         <div>
-          <vee-field
+          <input
             type="password"
-            rules="required|password"
-            name="password"
             id="password"
             v-model="user.password"
             class="bg-black rounded-xl focus:outline-none focus:text-black focus:bg-yellow-400  text-white w-1/4"
           />
-          <vee-error name="password" as="div"></vee-error>
         </div>
       </div>
 
@@ -42,18 +39,20 @@
           <label for="cofirmPassword">Confirm password:</label>
         </div>
         <div>
-          <vee-field
-            name="cofirmPassword"
-            rules="required|password"
+          <input
             type="password"
             id="cofirmPassword"
+            v-model="cofirmPassword"
             class="bg-black rounded-xl focus:outline-none focus:text-black focus:bg-yellow-400  text-white w-1/4"
           />
-          <vee-error name="cofirmPassword" as="div"></vee-error>
         </div>
       </div>
 
       <div>
+        <p v-if="!formIsValid">
+          Email or password is incorrect. <br />
+          Please try again.
+        </p>
         <div>
           <base-button
             @click.prevent="create"
@@ -61,28 +60,21 @@
           >
             Create account
           </base-button>
+          <base-button
+            @click.prevent="goHome"
+            class="bg-black rounded-xl m-4 text-white hover:bg-red-400 hover:text-black hover:text-2x1 focus:outline-none"
+          >
+            Cancel
+          </base-button>
         </div>
       </div>
-    </vee-form>
-    <base-button
-      @click.prevent="goHome"
-      class="bg-black text-center rounded-xl m-4 text-white hover:bg-red-400 hover:text-black hover:text-2x1 focus:outline-none"
-    >
-      Cancel
-    </base-button>
+    </form>
   </div>
   <the-spinner v-else></the-spinner>
 </template>
 
 <script>
-import { Form, Field, ErrorMessage } from 'vee-validate'
 export default {
-  components: {
-    VeeForm: Form,
-    VeeField: Field,
-    VeeError: ErrorMessage,
-  },
-
   data() {
     return {
       user: {
@@ -93,15 +85,25 @@ export default {
       cofirmPassword: '',
       formIsValid: true,
       isLoading: false,
+      error: null,
     }
   },
 
   methods: {
     check() {
       this.formIsValid = true
-      if (this.cofirmPassword !== this.user.password) {
-        alert('PASSWORD IS NOT MATCHING WITH CONFIRMED PASSWORD!!!')
+      if (
+        this.user.email === '' ||
+        !this.user.email.includes('@') ||
+        this.user.password.length < 6
+      ) {
         this.formIsValid = false
+      } else {
+        this.isValid = true
+        if (this.cofirmPassword !== this.user.password) {
+          alert('PASSWORD IS NOT MATCHING WITH CONFIRMED PASSWORD!!!')
+          this.formIsValid = false
+        }
       }
     },
 
