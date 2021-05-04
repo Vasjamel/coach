@@ -12,6 +12,7 @@
         </div>
         <div>
           <input
+            @change="check"
             type="text"
             id="username"
             v-model="email"
@@ -54,7 +55,7 @@ export default {
     return {
       email: '',
       password: '',
-      isValid: null,
+      isValid: true,
       isLoading: false,
     }
   },

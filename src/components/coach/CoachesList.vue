@@ -11,7 +11,7 @@
         </base-button>
 
         <base-button
-          class=" mx-auto hover:text-yellow-400  focus:outline-none"
+          class="  mx-auto hover:text-yellow-400  focus:outline-none"
           @click="$store.dispatch('downloadCoaches')"
         >
           Refresh
@@ -31,7 +31,6 @@
             id="search"
             type="text"
             class="bg-white text-black rounded-xl mx-2 focus:outline-none focus:bg-yellow-400"
-            @input="filterCoaches(ontext)"
             v-model.trim="text"
           />
         </base-card>
@@ -87,7 +86,7 @@
       </base-card>
 
       <base-card
-        v-else-if="filterCoachesByArea(toShow).length < 1"
+        v-else-if="toShow.length < 1"
         class="bg-gray-600 text-white m-20 text-center"
       >
         There are no coaches with these parameters. Please registed
@@ -98,7 +97,7 @@
           <ul class="flex text-center">
             <coaches-card
               class="justify-between items-stretch box-border min-h-full min-w-max max-w-full"
-              v-for="coach in paginate(filterCoachesByArea(toShow))"
+              v-for="coach in slicedToShow"
               :key="coach.id"
               :id="coach.id"
               :name="coach.name"
@@ -110,8 +109,11 @@
           </ul>
         </div>
 
-        <div v-if="pages.length > 1" class="flex justify-center m-auto">
-          <div class="m-4" v-for="page in pages" :key="page">
+        <div
+          v-if="pagination.pages.length > 1"
+          class="flex justify-center m-auto"
+        >
+          <div class="m-4" v-for="page in pagination.pages" :key="page">
             <base-button
               class="bg-white rounded-xl m-auto hover:bg-yellow-400"
               @click.prevent="changePage(page)"
@@ -139,9 +141,11 @@ export default {
       areasToFilter: ['frontend', 'backend', 'vue', 'other'],
       loading: false,
       filtered: null,
-      perPage: 3,
-      pages: [],
-      currentPage: 1,
+      pagination: {
+        perPage: 2,
+        pages: [],
+        currentPage: 1,
+      },
     }
   },
   computed: {
@@ -149,71 +153,53 @@ export default {
       return this.text
     },
     toShow() {
-      return this.filtered ? this.filtered : this.$store.getters.coaches
+      const coachesToShow = this.$store.state.coaches
+
+        .filter((coach) => {
+          return this.areasToFilter.some((area) => {
+            return area.includes(coach.area)
+          })
+        })
+
+        .filter((coach) => {
+          return (
+            coach.name.toLowerCase().includes(this.text.toLowerCase()) ||
+            coach.description.toLowerCase().includes(this.text.toLowerCase())
+          )
+        })
+
+      return coachesToShow
+    },
+
+    slicedToShow() {
+      const from =
+        this.pagination.currentPage * this.pagination.perPage -
+        this.pagination.perPage
+      const to = this.pagination.currentPage * this.pagination.perPage
+      return this.toShow.slice(from, to)
     },
   },
+
   watch: {
     toShow() {
-      this.paginate(this.filterCoachesByArea(this.toShow))
+      this.pagination.currentPage = 1
+      this.pagination.pages = []
+      const numberOfPages = Math.ceil(
+        this.toShow.length / this.pagination.perPage
+      )
+      for (let i = 1; i <= numberOfPages; i++) {
+        this.pagination.pages.push(i)
+      }
     },
   },
 
   methods: {
-    filterCoachesByArea(array) {
-      this.loading = true
-      const filtersByArea = array.filter((coach) => {
-        return coach.area.some((area) => this.areasToFilter.includes(area))
-      })
-      this.loading = false
-      return filtersByArea
-    },
-
     goToAddCoach() {
       this.$router.push({ path: '/addcoach' })
     },
 
     changePage(page) {
-      this.loading = true
-      this.currentPage = page
-      this.paginate(this.toShow)
-      this.loading = false
-    },
-
-    filterCoaches(value) {
-      this.loading = true
-      const withoutDuplicates = this.$store.getters.coaches.filter(
-        (coach) =>
-          coach.name.toLowerCase().includes(value.toLowerCase()) ||
-          coach.description.toLowerCase().includes(value.toLowerCase())
-      )
-
-      this.filtered = withoutDuplicates
-      this.calculatePages()
-      this.paginate(this.filtered)
-      this.currentPage = 1
-      this.loading = false
-    },
-
-    calculatePages() {
-      this.pages = []
-      let quantityOfPages = null
-      quantityOfPages = Math.ceil(
-        this.filterCoachesByArea(this.toShow).length / this.perPage
-      )
-      for (let i = 1; i <= quantityOfPages; i++) {
-        this.pages.push(i)
-      }
-    },
-
-    paginate(coaches) {
-      this.loading = true
-      const page = this.currentPage
-      let perPage = this.perPage
-      let from = page * perPage - perPage
-      let to = page * perPage
-      this.calculatePages()
-      this.loading = false
-      return coaches.slice(from, to)
+      this.pagination.currentPage = page
     },
 
     seeMessages() {
@@ -222,20 +208,7 @@ export default {
   },
 
   created() {
-    if (!this.$store.getters.loggedIn) {
-      this.$router.push('/home')
-    } else {
-      this.loading = true
-      this.$store.dispatch('downloadCoaches')
-      this.loading = false
-    }
-  },
-
-  beforeUpdate() {
-    this.loading = true
-    this.calculatePages()
-    this.paginate(this.toShow)
-    this.loading = false
+    this.$store.dispatch('downloadCoaches')
   },
 }
 </script>

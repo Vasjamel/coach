@@ -4,7 +4,7 @@ const store = {
   state() {
     return {
       loggedIn: false,
-      coaches: null,
+      coaches: [],
       messages: null,
       token: null,
       userId: null,
@@ -142,23 +142,24 @@ const store = {
       context.commit('changeSearchArea')
     },
 
-    async downloadCoaches(context) {
-      const response = await axios.get(
-        '/coaches.json?auth=' + context.getters.gettoken
-      )
-      const receivedArray = []
-      for (let each in response.data) {
-        const everyCoach = {
-          id: each,
-          name: response.data[each].name,
-          email: response.data[each].email,
-          photoUrl: response.data[each].photoUrl,
-          description: response.data[each].description,
-          area: response.data[each].area,
-        }
-        receivedArray.push(everyCoach)
-      }
-      context.commit('loadCoaches', receivedArray)
+    downloadCoaches(context) {
+      axios
+        .get('/coaches.json?auth=' + context.getters.gettoken)
+        .then((response) => {
+          const receivedArray = []
+          for (let each in response.data) {
+            const everyCoach = {
+              id: each,
+              name: response.data[each].name,
+              email: response.data[each].email,
+              photoUrl: response.data[each].photoUrl,
+              description: response.data[each].description,
+              area: response.data[each].area,
+            }
+            receivedArray.push(everyCoach)
+          }
+          context.commit('loadCoaches', receivedArray)
+        })
     },
     downloadMessages(context) {
       axios
