@@ -1,4 +1,4 @@
-import { createSSRApp } from 'vue'
+import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import router from './router/router'
 import { defineRule } from 'vee-validate'
@@ -15,7 +15,7 @@ import TheSpinner from './components/UI/TheSpinner'
 axios.defaults.baseURL =
   'https://couch-finder-51ae1-default-rtdb.firebaseio.com'
 
-const app = createSSRApp(App)
+const app = createApp(App)
 const store = createStore(mainStore)
 
 app.component('base-button', BaseButton)

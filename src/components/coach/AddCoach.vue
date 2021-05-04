@@ -45,12 +45,12 @@
         </div>
 
         <div>
-          <div class=" text-2xl">
+          <!-- <div class=" text-2xl">
             Upload photo or use the URL:
           </div>
           <div>
             <input type="file" accept="image/*" @change="uploadImage" />
-          </div>
+          </div> -->
           <label for="coach-url">URL to a coach photo:</label>
           <div>
             <input
@@ -178,11 +178,11 @@ export default {
       }
     },
 
-    uploadImage(event) {
-      const file = event.target.files[0]
-      this.newCoach.image = file
-      this.newCoach.photoUrl = URL.createObjectURL(file)
-    },
+    // uploadImage(event) {
+    //   const file = event.target.files[0]
+    //   this.newCoach.image = file
+    //   this.newCoach.photoUrl = URL.createObjectURL(file)
+    // },
 
     registerForm() {
       axios
@@ -190,7 +190,7 @@ export default {
           `/coaches.json?auth=${this.$store.getters.gettoken}`,
           this.newCoach
         )
-        .then((res) => {
+        .then(() => {
           this.newCoach = {
             name: '',
             email: '',
@@ -199,7 +199,6 @@ export default {
             area: [],
             image: null,
           }
-          console.log(res)
         })
         .catch((err) => alert(err))
     },
