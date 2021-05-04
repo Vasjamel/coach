@@ -1,6 +1,6 @@
 <template>
   <div class="flex font-mono">
-    <div class="mx-auto my-8 text-center">
+    <vee-form class="mx-auto my-8 text-center">
       <div class="m-0 bg-white">
         <h1 class="text-3xl">REGISTER A NEW COACH!</h1>
       </div>
@@ -8,39 +8,45 @@
         <div class="">
           <label for="coach-name">Input a coach name:</label>
           <div>
-            <input
+            <vee-field
+              rules="required"
               class="mx-2 px-2 focus:bg-yellow-400 focus:outline-none rounded-xl text-black"
               type="text"
               id="coach-name"
               name="coach-name"
               v-model.trim="newCoach.name"
             />
+            <vee-error class="text-red-600" name="coach-name" as="div" />
           </div>
         </div>
 
         <div>
           <label for="coach-email">Input a coach email:</label>
           <div>
-            <input
+            <vee-field
+              rules="required|email"
               class="mx-2 px-2 text-black focus:bg-yellow-400 focus:outline-none rounded-xl"
               type="email"
               id="coach-email"
               name="coach-email"
               v-model.trim="newCoach.email"
             />
+            <vee-error name="coach-email" as="div" class="text-red-600" />
           </div>
         </div>
 
         <div>
           <label for="coach-description">Input a short description:</label>
           <div>
-            <input
+            <vee-field
+              rules="required"
               class="mx-2 px-2 text-black focus:bg-yellow-400 focus:outline-none rounded-xl"
               type="text"
               id="coach-description"
               name="coach-description"
               v-model.trim="newCoach.description"
             />
+            <vee-error class="text-red-600" name="coach-description" as="div" />
           </div>
         </div>
 
@@ -53,13 +59,15 @@
           </div> -->
           <label for="coach-url">URL to a coach photo:</label>
           <div>
-            <input
+            <vee-field
+              rules="required"
               class="mx-2 px-2 text-black focus:bg-yellow-400 focus:outline-none rounded-xl"
               type="url"
               id="coach-url"
               name="coach-url"
               v-model.trim="newCoach.photoUrl"
             />
+            <vee-error class="text-red-600" name="coach-url" as="div" />
           </div>
         </div>
 
@@ -99,7 +107,7 @@
                 v-model="newCoach.area"
               />
             </div>
-            <div class="">
+            <div>
               <label for="coach-area">
                 Other
               </label>
@@ -111,11 +119,10 @@
               />
             </div>
           </div>
+          <vee-error class="text-red-600" name="area" as="div" />
         </div>
 
-        <div v-if="!isValid" class="text-red-400">
-          <p>Please insert the correct data!</p>
-          <p>Note that all the fields are mandatory!</p>
+        <div v-if="!isValid" class="text-red-600">
           <p>(At least 1 checkbox should be ticked)</p>
         </div>
       </div>
@@ -124,7 +131,7 @@
         @click.prevent="cancelSending"
         >Cancel</base-button
       >
-    </div>
+    </vee-form>
     <div class=" flex-col m-auto text-center w-72">
       <div class="mt-0 text-3xl">Coach preview:</div>
       <coaches-card
@@ -147,18 +154,24 @@
 <script>
 import axios from 'axios'
 import CoachesCard from './CoachesCard'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 export default {
-  components: { CoachesCard },
+  components: {
+    CoachesCard,
+    VeeForm: Form,
+    VeeField: Field,
+    VeeError: ErrorMessage,
+  },
   data() {
     return {
       isValid: true,
       newCoach: {
         name: '',
         email: '',
-        image: null,
         photoUrl: '',
         description: '',
         area: [],
+        // image: null,
       },
     }
   },
@@ -166,11 +179,10 @@ export default {
   methods: {
     checkForm() {
       if (
+        this.newCoach.area.length === 0 ||
         this.newCoach.name === '' ||
-        this.newCoach.email === '' ||
-        !this.newCoach.email.includes('@') ||
         this.newCoach.description === '' ||
-        this.newCoach.area.length === 0
+        this.newCoach.email === ''
       ) {
         this.isValid = false
       } else {
