@@ -12,7 +12,6 @@
         </div>
         <div>
           <input
-            @change="check"
             type="text"
             id="username"
             v-model="email"
@@ -69,27 +68,31 @@ export default {
         this.password.length < 6
       ) {
         this.isValid = false
+      } else {
+        this.isValid = true
       }
     },
 
-    log() {
+    async log() {
       this.isLoading = true
-      this.check()
+      await this.check()
 
       if (this.isValid) {
-        this.$store.dispatch('logIn', {
+        await this.$store.dispatch('logIn', {
           email: this.email,
           password: this.password,
         })
-        this.isLoading = false
         this.$router.push('/coaches')
+        this.isLoading = false
       } else {
         this.email = ''
         this.password = ''
         this.isLoading = false
+        this.$router.push('/login')
       }
     },
   },
+
   created() {
     if (this.$store.getters.loggedIn) {
       this.$router.push('/coaches')

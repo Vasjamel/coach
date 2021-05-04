@@ -208,7 +208,11 @@ export default {
   },
 
   created() {
-    this.$store.dispatch('downloadCoaches')
+    if (!this.$store.getters.loggedIn) {
+      this.$router.push('/home')
+    } else {
+      this.$store.dispatch('downloadCoaches')
+    }
   },
 }
 </script>

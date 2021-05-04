@@ -45,6 +45,12 @@
         </div>
 
         <div>
+          <div class=" text-2xl">
+            Upload photo or use the URL:
+          </div>
+          <div>
+            <input type="file" accept="image/*" @change="uploadImage" />
+          </div>
           <label for="coach-url">URL to a coach photo:</label>
           <div>
             <input
@@ -149,12 +155,14 @@ export default {
       newCoach: {
         name: '',
         email: '',
+        image: null,
         photoUrl: '',
         description: '',
         area: [],
       },
     }
   },
+
   methods: {
     checkForm() {
       if (
@@ -170,20 +178,28 @@ export default {
       }
     },
 
+    uploadImage(event) {
+      const file = event.target.files[0]
+      this.newCoach.image = file
+      this.newCoach.photoUrl = URL.createObjectURL(file)
+    },
+
     registerForm() {
       axios
         .post(
           `/coaches.json?auth=${this.$store.getters.gettoken}`,
           this.newCoach
         )
-        .then(() => {
+        .then((res) => {
           this.newCoach = {
             name: '',
             email: '',
             photoUrl: '',
             description: '',
             area: [],
+            image: null,
           }
+          console.log(res)
         })
         .catch((err) => alert(err))
     },
@@ -197,7 +213,6 @@ export default {
       if (this.isValid) {
         this.registerForm()
         this.$router.push('/coaches')
-        this.$store.dispatch('downloadCoaches')
       } else {
         alert('Please input a correct data!')
       }
