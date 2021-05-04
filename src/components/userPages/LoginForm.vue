@@ -2,7 +2,7 @@
   <the-spinner v-if="isLoading"></the-spinner>
 
   <div v-else class="m-8 text-2xl font-mono ">
-    <form class=" m-8 p-2 text-center bg-white rounded-xl">
+    <vee-form class=" m-8 p-2 text-center bg-white rounded-xl">
       <div class="text-3xl font-extrabold p-4">
         LOG IN BELOW
       </div>
@@ -11,12 +11,15 @@
           <label for="username">Email:</label>
         </div>
         <div>
-          <input
+          <vee-field
+            name="email"
+            rules="required|email"
             type="text"
             id="username"
             v-model="email"
             class="bg-black rounded-xl focus:outline-none focus:text-black  focus:bg-yellow-400 text-white w-1/4"
           />
+          <vee-error class=" text-red-600" name="email" as="div" />
         </div>
       </div>
       <div class="m-8">
@@ -24,12 +27,15 @@
           <label for="password">Password:</label>
         </div>
         <div>
-          <input
+          <vee-field
+            name="password"
+            rules="required|password"
             type="password"
             id="password"
             v-model="password"
             class="bg-black rounded-xl focus:outline-none focus:text-black focus:bg-yellow-400  text-white w-1/4"
           />
+          <vee-error class="text-red-600" name="password" as="div" />
         </div>
       </div>
       <div>
@@ -44,12 +50,18 @@
           Log In
         </base-button>
       </div>
-    </form>
+    </vee-form>
   </div>
 </template>
 
 <script>
+import { Form, Field, ErrorMessage } from 'vee-validate'
 export default {
+  components: {
+    VeeForm: Form,
+    VeeField: Field,
+    VeeError: ErrorMessage,
+  },
   data() {
     return {
       email: '',

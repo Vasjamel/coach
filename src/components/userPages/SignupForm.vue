@@ -1,6 +1,6 @@
 <template>
   <div v-if="!isLoading" class="m-8 text-2xl font-mono ">
-    <form class=" m-8 p-2 text-center bg-white rounded-xl">
+    <vee-form class=" m-8 p-2 text-center bg-white rounded-xl">
       <div class="text-3xl font-extrabold p-4">
         CREATE AN ACCOUNT
       </div>
@@ -9,12 +9,15 @@
           <label for="username">Email:</label>
         </div>
         <div>
-          <input
+          <vee-field
+            name="email"
+            rules="required|email"
             type="text"
             id="username"
             v-model="user.email"
             class="bg-black rounded-xl focus:outline-none focus:text-black  focus:bg-yellow-400 text-white w-1/4"
           />
+          <vee-error class="text-red-600" name="email" as="div" />
         </div>
       </div>
       <div class="m-8">
@@ -25,12 +28,15 @@
           >
         </div>
         <div>
-          <input
+          <vee-field
+            name="password"
+            rules="required|password"
             type="password"
             id="password"
             v-model="user.password"
             class="bg-black rounded-xl focus:outline-none focus:text-black focus:bg-yellow-400  text-white w-1/4"
           />
+          <vee-error class="text-red-600" name="password" as="div" />
         </div>
       </div>
 
@@ -68,13 +74,19 @@
           </base-button>
         </div>
       </div>
-    </form>
+    </vee-form>
   </div>
   <the-spinner v-else></the-spinner>
 </template>
 
 <script>
+import { Form, Field, ErrorMessage } from 'vee-validate'
 export default {
+  components: {
+    VeeForm: Form,
+    VeeField: Field,
+    VeeError: ErrorMessage,
+  },
   data() {
     return {
       user: {
@@ -91,19 +103,9 @@ export default {
 
   methods: {
     check() {
-      this.formIsValid = true
-      if (
-        this.user.email === '' ||
-        !this.user.email.includes('@') ||
-        this.user.password.length < 6
-      ) {
+      if (this.cofirmPassword !== this.user.password) {
+        alert('PASSWORD IS NOT MATCHING WITH CONFIRMED PASSWORD!!!')
         this.formIsValid = false
-      } else {
-        this.isValid = true
-        if (this.cofirmPassword !== this.user.password) {
-          alert('PASSWORD IS NOT MATCHING WITH CONFIRMED PASSWORD!!!')
-          this.formIsValid = false
-        }
       }
     },
 
