@@ -1,5 +1,8 @@
 <template>
   <div v-if="!isLoading" class="m-8 text-2xl font-mono ">
+    <the-modal v-if="showModal">
+      {{ showModal }}
+    </the-modal>
     <vee-form class=" m-8 p-2 text-center bg-white rounded-xl">
       <div class="text-3xl font-extrabold p-4">
         CREATE AN ACCOUNT
@@ -14,7 +17,7 @@
             rules="required|email"
             type="text"
             id="username"
-            v-model="user.email"
+            v-model.trim="user.email"
             class="bg-black rounded-xl focus:outline-none focus:text-black  focus:bg-yellow-400 text-white w-1/4"
           />
           <vee-error class="text-red-600" name="email" as="div" />
@@ -55,10 +58,6 @@
       </div>
 
       <div>
-        <p v-if="!formIsValid">
-          Email or password is incorrect. <br />
-          Please try again.
-        </p>
         <div>
           <base-button
             @click.prevent="create"
@@ -97,15 +96,25 @@ export default {
       cofirmPassword: '',
       formIsValid: true,
       isLoading: false,
-      error: null,
     }
+  },
+
+  computed: {
+    showModal() {
+      return this.$store.getters.error
+    },
   },
 
   methods: {
     check() {
       if (this.cofirmPassword !== this.user.password) {
-        alert('PASSWORD IS NOT MATCHING WITH CONFIRMED PASSWORD!!!')
+        this.$store.dispatch(
+          'seeError',
+          'PASSWORD IS NOT MATCHING WITH CONFIRMED PASSWORD!!!'
+        )
         this.formIsValid = false
+      } else {
+        this.formIsValid = true
       }
     },
 
@@ -115,14 +124,18 @@ export default {
       try {
         if (this.formIsValid) {
           await this.$store.dispatch('signUp', this.user)
-          this.$router.push('/login')
+          this.user.email = ''
+          this.user.password = ''
+          this.cofirmPassword = ''
         } else {
-          alert('Something went wrong. Please retry!')
-          this.$router.push('/home')
+          await this.$store.dispatch(
+            'seeError',
+            'Email or password is incorrect.'
+          )
         }
         this.isLoading = false
       } catch (err) {
-        alert(err.message)
+        await this.$store.dispatch('seeError', err.message)
         this.isLoading = false
       }
     },

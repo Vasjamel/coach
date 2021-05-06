@@ -9,6 +9,7 @@ const store = {
       token: null,
       userId: null,
       tokenExpiration: null,
+      error: null,
     }
   },
 
@@ -24,6 +25,9 @@ const store = {
     },
     gettoken(state) {
       return state.token
+    },
+    error(state) {
+      return state.error
     },
   },
 
@@ -54,6 +58,12 @@ const store = {
     loadMessages(state, payload) {
       state.messages = payload
     },
+    setError(state, payload) {
+      state.error = payload
+    },
+    clearError(state) {
+      state.error = null
+    },
   },
 
   actions: {
@@ -72,16 +82,15 @@ const store = {
       const responseData = await response.json()
 
       if (!response.ok) {
-        const error = new Error(
-          responseData.message || 'Failed to authenticate'
-        )
-        alert(error)
+        context.commit('setError', responseData.error.message)
+      } else {
+        context.commit('setUser', {
+          token: responseData.idToken,
+          userId: responseData.localId,
+          tokenExpiration: responseData.expiresIn,
+        })
+        context.commit('setError', 'Account is created! Please logIn.')
       }
-      context.commit('setUser', {
-        token: responseData.idToken,
-        userId: responseData.localId,
-        tokenExpiration: responseData.expiresIn,
-      })
     },
 
     async logIn(context, payload) {
@@ -96,14 +105,11 @@ const store = {
           }),
         }
       )
+
       const responseData = await response.json()
 
       if (!response.ok) {
-        const error = new Error(
-          responseData.message || 'failed to authenticate'
-        )
-        alert(error)
-        context.commit('logOut')
+        context.commit('setError', responseData.error.message)
       } else {
         localStorage.setItem('token', responseData.idToken)
         localStorage.setItem('userId', responseData.localId)
@@ -176,6 +182,14 @@ const store = {
           }
           context.commit('loadMessages', receivedArray)
         })
+    },
+
+    seeError(context, payload) {
+      context.commit('setError', payload)
+    },
+
+    closeModal(context) {
+      context.commit('clearError')
     },
   },
 }

@@ -2,6 +2,10 @@
   <the-spinner v-if="isLoading"></the-spinner>
 
   <div v-else class="m-8 text-2xl font-mono ">
+    <the-modal v-if="showModal">
+      {{ showModal }}
+    </the-modal>
+
     <vee-form class=" m-8 p-2 text-center bg-white rounded-xl">
       <div class="text-3xl font-extrabold p-4">
         LOG IN BELOW
@@ -39,12 +43,8 @@
         </div>
       </div>
       <div>
-        <p v-if="!isValid">
-          It seems that you entered incorrect email or password. <br />
-          Please try again.
-        </p>
         <base-button
-          @click.prevent="log"
+          @click="log"
           class="bg-black rounded-xl text-white hover:bg-yellow-400 hover:text-black hover:text-2x1 focus:outline-none"
         >
           Log In
@@ -66,49 +66,58 @@ export default {
     return {
       email: '',
       password: '',
-      isValid: true,
+
+      formIsValid: true,
       isLoading: false,
     }
   },
 
+  computed: {
+    showModal() {
+      return this.$store.getters.error
+    },
+  },
+
   methods: {
     check() {
-      this.isValid = true
       if (
         this.email === '' ||
         !this.email.includes('@') ||
         this.password.length < 6
       ) {
-        this.isValid = false
+        this.formIsValid = false
       } else {
-        this.isValid = true
+        this.formIsValid = true
       }
     },
 
     async log() {
       this.isLoading = true
       await this.check()
+      try {
+        if (this.formIsValid) {
+          await this.$store.dispatch('logIn', {
+            email: this.email,
+            password: this.password,
+          })
+          this.$router.push('/coaches')
+        } else {
+          await this.$store.dispatch(
+            'seeError',
+            'Email or password is incorrect.'
+          )
+        }
+      } catch (err) {
+        await this.$store.dispatch('seeError', err.message)
+      }
+      this.isLoading = false
+    },
 
-      if (this.isValid) {
-        await this.$store.dispatch('logIn', {
-          email: this.email,
-          password: this.password,
-        })
+    created() {
+      if (this.$store.getters.loggedIn) {
         this.$router.push('/coaches')
-        this.isLoading = false
-      } else {
-        this.email = ''
-        this.password = ''
-        this.isLoading = false
-        this.$router.push('/login')
       }
     },
-  },
-
-  created() {
-    if (this.$store.getters.loggedIn) {
-      this.$router.push('/coaches')
-    }
   },
 }
 </script>
