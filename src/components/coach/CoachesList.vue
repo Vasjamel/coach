@@ -81,17 +81,15 @@
         </base-card>
       </div>
 
-      <base-card v-if="!toShow">
-        <the-spinner></the-spinner>
-      </base-card>
-
       <base-card
-        v-else-if="toShow.length < 1"
+        v-if="toShow.length < 1"
         class="bg-gray-600 text-white m-20 text-center"
       >
         There are no coaches with these parameters. Please registed
         some!</base-card
       >
+      <the-spinner v-else-if="loading"></the-spinner>
+
       <div v-else>
         <div class="flex flex-wrap justify-center content-center">
           <ul class="flex text-center">
@@ -139,7 +137,6 @@ export default {
       text: '',
       coachesArray: [],
       areasToFilter: ['frontend', 'backend', 'vue', 'other'],
-      loading: false,
       filtered: null,
       pagination: {
         perPage: 2,
@@ -149,6 +146,9 @@ export default {
     }
   },
   computed: {
+    loading() {
+      return this.$store.getters.loading
+    },
     ontext() {
       return this.text
     },
@@ -167,7 +167,6 @@ export default {
             coach.description.toLowerCase().includes(this.text.toLowerCase())
           )
         })
-
       return coachesToShow
     },
 
@@ -208,11 +207,13 @@ export default {
   },
 
   created() {
+    this.$store.dispatch('startLoading')
     if (!this.$store.getters.loggedIn) {
       this.$router.push('/home')
     } else {
       this.$store.dispatch('downloadCoaches')
     }
+    this.$store.dispatch('endLoading')
   },
 }
 </script>

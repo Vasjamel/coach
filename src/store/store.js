@@ -10,6 +10,7 @@ const store = {
       userId: null,
       tokenExpiration: null,
       error: null,
+      loading: false,
     }
   },
 
@@ -28,6 +29,9 @@ const store = {
     },
     error(state) {
       return state.error
+    },
+    loading(state) {
+      return state.loading
     },
   },
 
@@ -63,6 +67,12 @@ const store = {
     },
     clearError(state) {
       state.error = null
+    },
+    startLoading(state) {
+      state.loading = true
+    },
+    endLoading(state) {
+      state.loading = false
     },
   },
 
@@ -140,8 +150,11 @@ const store = {
       context.commit('logOut')
     },
 
-    registerForm(context) {
-      context.commit('registerForm')
+    startLoading(context) {
+      context.commit('startLoading')
+    },
+    endLoading(context) {
+      context.commit('endLoading')
     },
 
     searchAreaChange(context) {

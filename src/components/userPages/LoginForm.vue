@@ -1,5 +1,5 @@
 <template>
-  <the-spinner v-if="isLoading"></the-spinner>
+  <the-spinner v-if="loading"></the-spinner>
 
   <div v-else class="m-8 text-2xl font-mono ">
     <the-modal v-if="showModal">
@@ -66,15 +66,16 @@ export default {
     return {
       email: '',
       password: '',
-
       formIsValid: true,
-      isLoading: false,
     }
   },
 
   computed: {
     showModal() {
       return this.$store.getters.error
+    },
+    loading() {
+      return this.$store.getters.loading
     },
   },
 
@@ -92,7 +93,7 @@ export default {
     },
 
     async log() {
-      this.isLoading = true
+      this.$store.dispatch('startLoading')
       await this.check()
       try {
         if (this.formIsValid) {
@@ -101,16 +102,18 @@ export default {
             password: this.password,
           })
           this.$router.push('/coaches')
+          this.$store.dispatch('endLoading')
         } else {
           await this.$store.dispatch(
             'seeError',
             'Email or password is incorrect.'
           )
+          this.$store.dispatch('endLoading')
         }
       } catch (err) {
         await this.$store.dispatch('seeError', err.message)
       }
-      this.isLoading = false
+      this.$store.dispatch('endLoading')
     },
 
     created() {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isLoading" class="m-8 text-2xl font-mono ">
+  <div v-if="!loading" class="m-8 text-2xl font-mono ">
     <the-modal v-if="showModal">
       {{ showModal }}
     </the-modal>
@@ -95,13 +95,15 @@ export default {
 
       cofirmPassword: '',
       formIsValid: true,
-      isLoading: false,
     }
   },
 
   computed: {
     showModal() {
       return this.$store.getters.error
+    },
+    loading() {
+      return this.$store.getters.loading
     },
   },
 
@@ -119,7 +121,7 @@ export default {
     },
 
     async create() {
-      this.isLoading = true
+      this.$store.dispatch('startLoading')
       await this.check()
       try {
         if (this.formIsValid) {
@@ -127,16 +129,20 @@ export default {
           this.user.email = ''
           this.user.password = ''
           this.cofirmPassword = ''
+
+          this.$store.dispatch('endLoading')
         } else {
           await this.$store.dispatch(
             'seeError',
             'Email or password is incorrect.'
           )
+
+          this.$store.dispatch('endLoading')
         }
-        this.isLoading = false
       } catch (err) {
         await this.$store.dispatch('seeError', err.message)
-        this.isLoading = false
+
+        this.$store.dispatch('endLoading')
       }
     },
 
