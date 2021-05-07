@@ -140,7 +140,7 @@ export default {
       filtered: null, //filtered array of coaches
       //pagination details:
       pagination: {
-        perPage: 2,
+        perPage: 3,
         pages: [],
         currentPage: 1,
       },
