@@ -54,26 +54,33 @@ export default {
   props: ['name', 'email', 'photoUrl', 'description', 'area', 'id'],
   data() {
     return {
-      seeContactForm: false,
-      thisCoach: null,
+      seeContactForm: false, //see details and send message form
+      thisCoach: null, //find the correct coach id to send message or delete
     }
   },
   computed: {
+    //name to upper case
     computedName() {
       return this.name.toUpperCase()
     },
+
+    //add alt attribute if image is not availible
     photoAlt() {
       return this.name + ' image shoud be here'
     },
 
+    //in case card is addCoach preview - hide button details/message
     showButton() {
       return this.$route.fullPath === '/addcoach' ? false : true
     },
+
+    //button type change: show info / hide info
     showHide() {
       return this.seeContactForm ? 'Hide info' : 'See more'
     },
   },
   methods: {
+    //show the correct coach details
     contact(id) {
       this.seeContactForm = !this.seeContactForm
       const correctCoach = this.$store.getters.coaches.find(
@@ -81,9 +88,13 @@ export default {
       )
       this.thisCoach = correctCoach
     },
+
+    //hide details
     hide() {
       this.seeContactForm = false
     },
+
+    //send message to database
     send(message) {
       const createMessage = {
         coach: this.thisCoach.name,

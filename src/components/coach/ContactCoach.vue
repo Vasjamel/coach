@@ -66,24 +66,29 @@ export default {
   },
 
   computed: {
+    //show loading spinner
     loading() {
       return this.$store.getters.loading
     },
     showModal() {
+      //if true show message in modal window
       return this.$store.getters.error
     },
   },
 
   methods: {
+    //hide details
     hide() {
       this.$emit('hide-form')
       this.message = ''
     },
     send() {
+      //send message - emit to coachesCard
       this.$emit('send-form', this.message)
       this.message = ''
     },
     async deleteCoach() {
+      //delete coach
       this.$store.dispatch('startLoading')
       await axios.delete(
         `/coaches/${this.$props.correctCoach.id}.json?auth=${this.$store.getters.gettoken}`

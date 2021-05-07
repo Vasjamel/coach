@@ -3,14 +3,15 @@ import axios from 'axios'
 const store = {
   state() {
     return {
-      loggedIn: false,
-      coaches: [],
-      messages: null,
+      loggedIn: false, //checks if user is logged in
+      coaches: [], //array of coaches from DB
+      messages: null, //array of messages
+      error: null, //if error - show modal window
+      loading: false, //if loading - show spinner
+      //secureToken from firebase:
       token: null,
       userId: null,
       tokenExpiration: null,
-      error: null,
-      loading: false,
     }
   },
 
@@ -77,6 +78,7 @@ const store = {
   },
 
   actions: {
+    //register user:
     async signUp(context, payload) {
       const response = await fetch(
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDPbLFOBHKzYhiK0NAuVN6ZltT2RCApStk',
@@ -104,6 +106,7 @@ const store = {
     },
 
     async logIn(context, payload) {
+      //logIn:
       const response = await fetch(
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDPbLFOBHKzYhiK0NAuVN6ZltT2RCApStk',
         {
@@ -132,6 +135,7 @@ const store = {
     },
 
     tryLogin(context) {
+      //to allow user to reopen page without login (if was logged in)
       const token = localStorage.getItem('token')
       const userId = localStorage.getItem('userId')
 
@@ -162,6 +166,7 @@ const store = {
     },
 
     downloadCoaches(context) {
+      //load array of coaches from database
       axios
         .get('/coaches.json?auth=' + context.getters.gettoken)
         .then((response) => {
@@ -181,6 +186,7 @@ const store = {
         })
     },
     downloadMessages(context) {
+      //load array of messages from database
       axios
         .get('messages.json?auth=' + context.getters.gettoken)
         .then((response) => {

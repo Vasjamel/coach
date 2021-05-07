@@ -72,14 +72,17 @@ export default {
 
   computed: {
     showModal() {
+      //show error message in modal wiindow
       return this.$store.getters.error
     },
     loading() {
+      //show loading spinner
       return this.$store.getters.loading
     },
   },
 
   methods: {
+    //check if all the fields are filled in
     check() {
       if (
         this.email === '' ||
@@ -117,6 +120,7 @@ export default {
     },
 
     created() {
+      //if user is logged in - redirect to coaches page
       if (this.$store.getters.loggedIn) {
         this.$router.push('/coaches')
       }

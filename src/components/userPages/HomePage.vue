@@ -25,6 +25,7 @@ export default {
   },
 
   created() {
+    //if logged in redirect to coaches page
     if (this.$store.getters.loggedIn) {
       this.$router.push('/coaches')
     }

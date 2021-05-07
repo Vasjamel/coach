@@ -134,10 +134,11 @@ export default {
 
   data() {
     return {
-      text: '',
-      coachesArray: [],
+      text: '', //search input text
+      //coachesArray: [],
       areasToFilter: ['frontend', 'backend', 'vue', 'other'],
-      filtered: null,
+      filtered: null, //filtered array of coaches
+      //pagination details:
       pagination: {
         perPage: 2,
         pages: [],
@@ -147,11 +148,14 @@ export default {
   },
   computed: {
     loading() {
+      //show loading spinner
       return this.$store.getters.loading
     },
     ontext() {
       return this.text
     },
+
+    //global computed property: filter areas + search by name and description filter
     toShow() {
       const coachesToShow = this.$store.state.coaches
 
@@ -170,6 +174,7 @@ export default {
       return coachesToShow
     },
 
+    //paginate the filtered array
     slicedToShow() {
       const from =
         this.pagination.currentPage * this.pagination.perPage -
@@ -180,6 +185,7 @@ export default {
   },
 
   watch: {
+    //to calculate quantity of pages needed
     toShow() {
       this.pagination.currentPage = 1
       this.pagination.pages = []
@@ -197,15 +203,18 @@ export default {
       this.$router.push({ path: '/addcoach' })
     },
 
+    //on click to another page
     changePage(page) {
       this.pagination.currentPage = page
     },
 
+    //go to messages page
     seeMessages() {
       this.$router.push('/messages')
     },
   },
 
+  //if logged in - load coaches. Else redirect to home page for log in
   created() {
     this.$store.dispatch('startLoading')
     if (!this.$store.getters.loggedIn) {

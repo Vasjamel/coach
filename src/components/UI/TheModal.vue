@@ -24,6 +24,7 @@
 <script>
 export default {
   methods: {
+    //on click close modal
     closeModal() {
       this.$store.dispatch('closeModal')
     },

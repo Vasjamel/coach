@@ -171,7 +171,9 @@ export default {
   },
   data() {
     return {
-      isValid: true,
+      isValid: true, // check if input is valid
+
+      //input new coach details:
       newCoach: {
         name: '',
         email: '',
@@ -184,12 +186,14 @@ export default {
   },
 
   computed: {
+    //show loading spinner
     loading() {
       return this.$store.getters.loading
     },
   },
 
   methods: {
+    //check if inputs are filled in correctly
     checkForm() {
       if (
         this.newCoach.area.length === 0 ||
@@ -209,6 +213,7 @@ export default {
     //   this.newCoach.photoUrl = URL.createObjectURL(file)
     // },
 
+    //send new coach to database
     registerForm() {
       axios
         .post(
@@ -228,10 +233,12 @@ export default {
         .catch((err) => alert(err))
     },
 
+    //cancel new coach creation and return to coaches page
     cancelSending() {
       this.$router.push('/coaches')
     },
 
+    //on submit form check if inputs are filled in correctly and send data to the DB
     submitForm() {
       this.$store.dispatch('startLoading')
       this.checkForm()
@@ -245,7 +252,9 @@ export default {
       }
     },
   },
+
   created() {
+    //if user is not logged in redirect to home page for log in
     if (!this.$store.getters.loggedIn) {
       this.$router.push('/home')
     }

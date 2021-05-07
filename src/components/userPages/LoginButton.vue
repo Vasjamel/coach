@@ -20,6 +20,7 @@ export default {
     },
   },
   computed: {
+    //button redirects to login page
     buttonType() {
       return this.$store.getters.loggedIn ? 'Log Out' : 'Log In'
     },

@@ -34,18 +34,21 @@ export default {
     arrayOfMessages() {
       return this.$store.getters.getMessages
     },
+
     loading() {
       return this.$store.getters.loading
     },
   },
 
   methods: {
+    //return to coaches page
     goToCoaches() {
       this.$router.push('/coaches')
     },
   },
 
   created() {
+    //dowload messages from DB
     this.$store.dispatch('startLoading')
     if (!this.$store.getters.loggedIn) {
       this.$router.push('/home')

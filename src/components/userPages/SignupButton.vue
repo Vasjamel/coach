@@ -10,6 +10,7 @@
 <script>
 export default {
   methods: {
+    //button redirects to sign up page
     openSignup() {
       this.$router.push('/signup')
     },

@@ -92,7 +92,6 @@ export default {
         email: '',
         password: '',
       },
-
       cofirmPassword: '',
       formIsValid: true,
     }
@@ -108,6 +107,7 @@ export default {
   },
 
   methods: {
+    //chech form if password = confired password
     check() {
       if (this.cofirmPassword !== this.user.password) {
         this.$store.dispatch(
@@ -120,6 +120,7 @@ export default {
       }
     },
 
+    //registed user and create account
     async create() {
       this.$store.dispatch('startLoading')
       await this.check()
@@ -151,6 +152,7 @@ export default {
     },
   },
   created() {
+    //if loggedIn - redirect to coaches page
     if (this.$store.getters.loggedIn) {
       this.$router.push('/coaches')
     }

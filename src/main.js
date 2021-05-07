@@ -13,6 +13,7 @@ import BaseCard from './components/UI/BaseCard'
 import TheSpinner from './components/UI/TheSpinner'
 import TheModal from './components/UI/TheModal'
 
+//default axios url database
 axios.defaults.baseURL =
   'https://couch-finder-51ae1-default-rtdb.firebaseio.com'
 
@@ -24,6 +25,7 @@ app.component('base-card', BaseCard)
 app.component('the-spinner', TheSpinner)
 app.component('the-modal', TheModal)
 
+//rules for vee-validation required field:
 defineRule('required', (value) => {
   if (!value || !value.length) {
     return 'This field is required!'
@@ -31,6 +33,7 @@ defineRule('required', (value) => {
   return true
 })
 
+//rules for vee-validation  email field
 defineRule('email', (value) => {
   if (
     !/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/.test(
@@ -42,6 +45,7 @@ defineRule('email', (value) => {
   return true
 })
 
+//rules for vee-validation  password field
 defineRule('password', (value) => {
   if (value.length < 6) {
     return 'Password should be at least 6 characters long!'

@@ -23,11 +23,13 @@ import axios from 'axios'
 export default {
   props: ['id', 'coach', 'message'],
   computed: {
+    //coach name show UPPERCASE
     coachUpper() {
       return this.$props.coach.toUpperCase()
     },
   },
   methods: {
+    //delete message
     async deleteMessage() {
       this.$store.dispatch('startLoading')
       await axios.delete(
